@@ -23,7 +23,6 @@ La siguiente tabla incluye el nombre de cada archivo .java que contiene el proye
 | Genero.java          | main/java/playlist | Este archivo es el encargado de manejar el enumerable Genero con sus respectivos constructores, atributos y métodos. |
 | TestCancion.java     | test/java/playlist | Este archivo es el encargado de realizar pruebas automatizadas a la clase Cancion. |
 | TestPlayList.java    | test/java/playlist | Este archivo es el encargado de realizar pruebas automatizadas a la clase PlayList. |
----
 
 ## Modo de uso de cada Clase
 
@@ -37,13 +36,13 @@ _Constructores_:
 | Tiempo    | int    | Requerido | Número entero con la duración de la canción (en segundos) |
 | Artista   | String | Opcional  | Nombre del intérprete o grupo |
 | Álbum     | String | Opcional  | Nombre del álbum en el que se encuentra la canción |
----
+
 | Parámetro | Tipo   | Condición | Descripción |
 | --------- | :----: | :-------: | ----------- |
 | Título    | String | Requerido | Cadena de caracteres con el título de la canción a crear |
 | Tiempo    | int    | Requerido | Número entero con la duración de la canción (en segundos) |
 | Artista   | String | Opcional  | Nombre del intérprete o grupo |
----
+
 | Parámetro | Tipo   | Condición | Descripción |
 | --------- | :----: | :-------: | ----------- |
 | Título    | String | Requerido | Cadena de caracteres con el título de la canción a crear |
@@ -72,7 +71,6 @@ _Métodos_:
 | setDuracion    | Privado      | int        | Ninguno               |
 | setAlbum       | Privado      | String     | Ninguno               |
 | setArtista     | Privado      | String     | Ninguno               |
----
 
 ## Conclusiones
 
