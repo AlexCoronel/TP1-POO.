@@ -51,11 +51,11 @@ public class Cancion {
     }
 
     private void setAlbum(String album) {
-        if (duracion > 0) this.album = album;
+        if (this.duracion > 0) this.album = album;
     }
 
     private void setArtista(String artista) {
-        if (duracion > 0) this.artista = artista;
+        if (this.duracion > 0) this.artista = artista;
     }
 
 }
