@@ -38,24 +38,24 @@ public class Cancion {
     }
 
     private void setTitulo(String titulo) {
-        if (this.duracion >= 0) this.titulo = titulo;
+        if (this.duracion > 0) this.titulo = titulo;
     }
 
     private void setDuracion(int duracion) {
-        if (duracion >= 0) {
+        if (duracion > 0) {
             this.duracion = duracion;
         } else {
             // Aún no se vió Excepciones. Mostramos un mensaje y no seteamos los campos
-            System.out.println("La duración de la canción no puede ser negativa");
+            System.out.println("La duración de la canción no puede ser negativa o cero");
         }
     }
 
     private void setAlbum(String album) {
-        if (duracion >= 0) this.album = album;
+        if (duracion > 0) this.album = album;
     }
 
     private void setArtista(String artista) {
-        if (duracion >= 0) this.artista = artista;
+        if (duracion > 0) this.artista = artista;
     }
 
 }
