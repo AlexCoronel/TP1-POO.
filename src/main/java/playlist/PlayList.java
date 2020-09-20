@@ -116,7 +116,7 @@ public class PlayList {
 
     public void mostrarPlaylistOrdenadaPorTiempo() {
         if (!this.estaOrdenadaPorTiempo) {
-            this.ordenarPorTiempoConInsercion();
+            this.ordenarPorTiempoConSeleccion();
         }
 
         System.out.println("La lista ordenada por duración es:");
@@ -139,17 +139,21 @@ public class PlayList {
 
             for (int i = 0; i < this.consultarCantidadDeCancionesCargadas(); i++) {
                 // Declaro la variable para la posicion minima dentro del loop para que su scope sea lo menor posible
-                int minima = i;
+                int duracionMinima = this.lista[this.ordenadasPorTiempo[i]].getDuracion();
+                int posicionMinima = i;
 
                 for (int j = i +1; j < this.consultarCantidadDeCancionesCargadas(); j++) {
                     // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
-                    if (this.ordenadasPorTiempo[j] < this.ordenadasPorTiempo[minima]) minima = j;
+                    if (this.lista[this.ordenadasPorTiempo[j]].getDuracion() < duracionMinima) {
+                        duracionMinima = this.lista[this.ordenadasPorTiempo[j]].getDuracion();
+                        posicionMinima = j;
+                    }
                 }
 
                 // Hago el reemplazo de valores en las posiciones que encontre, uso una variable auxiliar porque no me salio hacerlo con suma / resta
-                int temporaria = this.ordenadasPorTiempo[minima];
-                this.ordenadasPorTiempo[minima] = this.ordenadasPorTiempo[i];
-                this.ordenadasPorTiempo[i] = temporaria;
+                int temporaria = this.ordenadasPorTiempo[i];
+                this.ordenadasPorTiempo[i] = this.ordenadasPorTiempo[posicionMinima];
+                this.ordenadasPorTiempo[posicionMinima] = temporaria;
             }
         
             this.setEstaOrdenadaPorTiempo(true);
