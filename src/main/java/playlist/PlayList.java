@@ -133,7 +133,7 @@ public class PlayList {
                 // Declaro la variable para la posicion minima dentro del loop para que su scope sea lo menor posible
                 int minima = i;
 
-                for (int j = i+1; j < this.consultarCantidadDeCancionesCargadas(); j++) {
+                for (int j = i +1; j < this.consultarCantidadDeCancionesCargadas(); j++) {
                     // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
                     if (this.ordenadasPorTiempo[j] < this.ordenadasPorTiempo[minima]) minima = j;
                 }
@@ -157,21 +157,20 @@ public class PlayList {
         if (this.consultarCantidadDeCancionesCargadas() == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.estaOrdenadaPorTiempo) {
-
-            for (int i = 1; i < consultarCantidadDeCancionesCargadas(); i++) {
+            for (int i = 1; i < this.consultarCantidadDeCancionesCargadas(); i++) {
                 // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
                 int valorActual = this.ordenadasPorTiempo[i];
-                int j = i - 1;
+                int j = i -1;
 
-                // Mientras que haya registros en el array y el valor evaluado sea mayor al que estaba en valorActual, sigo recorriendo el array
+                // Mientras que haya registros en el array y el valor evaluado sea mayor que el valorActual, muevo el valor "para la izquierda"
                 while (j >= 0 && this.ordenadasPorTiempo[j] > valorActual) {
-                    // Recorro el array de "atras para adelante", tengo que traer el menor numero lo mas cerca de la posicion 0 posible
-                    this.ordenadasPorTiempo[j + 1] = this.ordenadasPorTiempo[j];
-                    j = j - 1;
+                    // Realizo el movimiento y muevo el puntero j
+                    this.ordenadasPorTiempo[j +1] = this.ordenadasPorTiempo[j];
+                    j = j -1;
                 }
 
-                // Dejo el valorActual (el minimo) en la posicion mas cerca del 0 que encontre
-                this.ordenadasPorTiempo[j + 1] = valorActual;
+                // Copiamos el valorActual a su posición final y vamos a la proxima iteración
+                this.ordenadasPorTiempo[j +1] = valorActual;
             }
 
             this.setEstaOrdenadaPorTiempo();
