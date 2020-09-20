@@ -60,7 +60,15 @@ public class PlayListTest {
 
     @Test
     public void muestraElOrdenamiento() {
+        Cancion cancionLarga = new Cancion("Titulo largo", 300);
+        Cancion cancionCorta = new Cancion("Titulo corto", 90);
+
+        playlistDefault.agregarCancion(cancionTest);
+        playlistDefault.agregarCancion(cancionLarga);
+        playlistDefault.agregarCancion(cancionCorta);
+
         playlistDefault.mostrarPlaylistOrdenadaPorTiempo();
+        assertEquals("Generando la lista con 1.000 posiciones\nBlaBla\n", salidasDeConsola.toString());
     }
 
 }
