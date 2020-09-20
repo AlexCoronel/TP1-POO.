@@ -20,7 +20,6 @@ La siguiente tabla incluye el nombre de cada archivo .java que contiene el proye
 | -------------------- | :----------------: | ------- |
 | Cancion.java         | main/java/playlist | Este archivo es el encargado de manejar la clase Cancion con sus respectivos constructores, atributos y métodos. |
 | PlayList.java        | main/java/playlist | Este archivo es el encargado de manejar la clase PlayList con sus respectivos constructores, atributos y métodos. |
-| Genero.java          | main/java/playlist | Este archivo es el encargado de manejar el enumerable Genero con sus respectivos constructores, atributos y métodos. |
 | TestCancion.java     | test/java/playlist | Este archivo es el encargado de realizar pruebas automatizadas a la clase Cancion. |
 | TestPlayList.java    | test/java/playlist | Este archivo es el encargado de realizar pruebas automatizadas a la clase PlayList. |
 
