@@ -59,7 +59,7 @@ public class PlayListTest {
     }
 
     @Test
-    public void muestraElOrdenamiento() {
+    public void verificaQueElOrdenamientoSeaCorrecto() {
         Cancion cancionLarga = new Cancion("Titulo largo", 300);
         Cancion cancionCorta = new Cancion("Titulo corto", 90);
 
