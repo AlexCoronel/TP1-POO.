@@ -68,7 +68,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionCorta);
 
         playlistDefault.mostrarPlaylistOrdenadaPorTiempo();
-        assertEquals("Generando la lista con 1.000 posiciones\nBlaBla\n", salidasDeConsola.toString());
+        assertEquals("La lista ordenada por duración es:\n\t1. Titulo corto: 90 segundos\n\t2. Titulo de cancion: 145 segundos\n\t3. Titulo largo: 300 segundos\n", salidasDeConsola.toString());
     }
 
 }

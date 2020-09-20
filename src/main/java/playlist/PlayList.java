@@ -167,7 +167,6 @@ public class PlayList {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.estaOrdenadaPorTiempo) {
             for (int i = 1; i < this.consultarCantidadDeCancionesCargadas(); i++) {
-                System.out.println(this.ordenadasPorTiempo[i]);
                 // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
                 int valorActual = this.lista[this.ordenadasPorTiempo[i]].getDuracion();
                 int posicionActual = this.ordenadasPorTiempo[i];
