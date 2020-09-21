@@ -24,8 +24,7 @@ public class PlayList {
         Arrays.fill(ordenadasPorTitulo, Integer.MAX_VALUE);
         this.ordenadasPorTiempo = new int[cantidadDeCanciones];
         Arrays.fill(ordenadasPorTiempo, Integer.MAX_VALUE);
-        this.setEstaOrdenadaPorTiempo(true);
-        this.setEstaOrdenadaPorTitulo(true);
+        this.setEstaOrdenadaPorTipo(Tipo.TITULO, true);
     }
 
     PlayList() {
@@ -39,12 +38,29 @@ public class PlayList {
         this.agregarCancion(cancion);
     }
 
-    private void setEstaOrdenadaPorTiempo(boolean valor) {
-        this.estaOrdenadaPorTiempo = valor;
+    private void setEstaOrdenadaPorTipo(Tipo tipo, boolean valor) {
+        switch (tipo) {
+            case TITULO:
+                this.estaOrdenadaPorTitulo = valor;
+
+            case DURACION:
+                this.estaOrdenadaPorTiempo = valor;
+
+            default:
+        }
     }
 
-    private void setEstaOrdenadaPorTitulo(boolean valor) {
-        this.estaOrdenadaPorTitulo = valor;
+    private boolean getEstaOrdenadaPorTipo(Tipo tipo) {
+        switch (tipo) {
+            case TITULO:
+                return this.estaOrdenadaPorTitulo;
+
+            case DURACION:
+                return this.estaOrdenadaPorTiempo;
+
+            default:
+                return false;
+        }
     }
 
     public int consultarCantidadDeCanciones() {
@@ -66,14 +82,14 @@ public class PlayList {
         } else {
             if (this.ultimaCancionCargada > 0 &&
                 this.estaOrdenadaPorTiempo &&
-                cancion.getDuracion() < this.lista[this.ultimaCancionCargada -1].getDuracion()
-                ) this.setEstaOrdenadaPorTiempo(false);
+                cancion.getPorTipo(Tipo.DURACION).compareToIgnoreCase(this.lista[this.ultimaCancionCargada -1].getPorTipo(Tipo.DURACION)) < 0
+                ) this.setEstaOrdenadaPorTipo(Tipo.DURACION, false);
             this.ordenadasPorTiempo[this.consultarCantidadDeCanciones()] = this.ultimaCancionCargada;
 
             if (this.ultimaCancionCargada > 0 &&
             this.estaOrdenadaPorTitulo &&
-            cancion.getTitulo().compareToIgnoreCase(this.lista[this.ultimaCancionCargada -1].getTitulo()) < 0
-            ) this.setEstaOrdenadaPorTitulo(false);
+            cancion.getPorTipo(Tipo.TITULO).compareToIgnoreCase(this.lista[this.ultimaCancionCargada -1].getPorTipo(Tipo.TITULO)) < 0
+            ) this.setEstaOrdenadaPorTipo(Tipo.TITULO, false);
             this.ordenadasPorTitulo[this.consultarCantidadDeCanciones()] = this.ultimaCancionCargada;
 
             this.lista[this.consultarCantidadDeCanciones()] = cancion;
@@ -121,7 +137,7 @@ public class PlayList {
 
     public void mostrarPlaylistOrdenadaPorTiempo() {
         if (!this.estaOrdenadaPorTiempo) {
-            this.ordenarPorTiempoConSeleccion();
+            this.ordenarConSeleccion(this.ordenadasPorTiempo, Tipo.DURACION);
         }
 
         System.out.println("La lista ordenada por duración es:");
@@ -132,7 +148,7 @@ public class PlayList {
 
     public void mostrarPlaylistOrdenadaPorTitulo() {
         if (!this.estaOrdenadaPorTitulo) {
-            this.ordenarPorTituloConInsercion();
+            this.ordenarConInsercion(this.ordenadasPorTitulo, Tipo.TITULO);
         }
 
         System.out.println("La lista ordenada por título es:");
@@ -147,108 +163,60 @@ public class PlayList {
     //      Total: 240 segundos
 
     // Se utilizan únicamente algortimos de ordenamiento vistos en Algoritmos y Programación 1, obviando Bubble por su pobre rendiemiento
-    private void ordenarPorTituloConSeleccion() {
+    private int[] ordenarConSeleccion(int[] arrayDePosiciones, Tipo tipo) {
         if (this.consultarCantidadDeCanciones() == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
-        } else if (!this.estaOrdenadaPorTitulo) {
+        } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
 
             for (int i = 0; i < this.consultarCantidadDeCanciones(); i++) {
                 // Declaro la variable para la posicion minima dentro del loop para que su scope sea lo menor posible
-                int posicionMenor = i;
-
-                for (int j = i +1; j < this.consultarCantidadDeCanciones(); j++) {
-                    // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
-                    if (this.lista[this.ordenadasPorTitulo[j]].getTitulo().compareToIgnoreCase(this.lista[this.ordenadasPorTitulo[posicionMenor]].getTitulo()) < 0) {
-                        posicionMenor = j;
-                    }
-                }
-
-                // Hago el reemplazo de valores en las posiciones que encontre, uso una variable auxiliar porque no me salio hacerlo con suma / resta
-                int temporaria = this.ordenadasPorTitulo[i];
-                this.ordenadasPorTitulo[i] = this.ordenadasPorTitulo[posicionMenor];
-                this.ordenadasPorTitulo[posicionMenor] = temporaria;
-            }
-        
-            this.setEstaOrdenadaPorTitulo(true);
-        }
-
-    }
-
-    private void ordenarPorTiempoConSeleccion() {
-        if (this.consultarCantidadDeCanciones() == 0) {
-            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
-        } else if (!this.estaOrdenadaPorTiempo) {
-
-            for (int i = 0; i < this.consultarCantidadDeCanciones(); i++) {
-                // Declaro la variable para la posicion minima dentro del loop para que su scope sea lo menor posible
-                int duracionMinima = this.lista[this.ordenadasPorTiempo[i]].getDuracion();
+                int duracionMinima = this.lista[arrayDePosiciones[i]].getDuracion();
                 int posicionMinima = i;
 
                 for (int j = i +1; j < this.consultarCantidadDeCanciones(); j++) {
                     // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
-                    if (this.lista[this.ordenadasPorTiempo[j]].getDuracion() < duracionMinima) {
-                        duracionMinima = this.lista[this.ordenadasPorTiempo[j]].getDuracion();
+                    if (this.lista[arrayDePosiciones[j]].getDuracion() < duracionMinima) {
+                        duracionMinima = this.lista[arrayDePosiciones[j]].getDuracion();
                         posicionMinima = j;
                     }
                 }
 
                 // Hago el reemplazo de valores en las posiciones que encontre, uso una variable auxiliar porque no me salio hacerlo con suma / resta
-                int temporaria = this.ordenadasPorTiempo[i];
-                this.ordenadasPorTiempo[i] = this.ordenadasPorTiempo[posicionMinima];
-                this.ordenadasPorTiempo[posicionMinima] = temporaria;
+                int temporaria = arrayDePosiciones[i];
+                arrayDePosiciones[i] = arrayDePosiciones[posicionMinima];
+                arrayDePosiciones[posicionMinima] = temporaria;
             }
         
-            this.setEstaOrdenadaPorTiempo(true);
+            this.setEstaOrdenadaPorTipo(tipo, true);
         }
+
+        return arrayDePosiciones;
     }
 
-    private void ordenarPorTituloConInsercion() {
+    private int[] ordenarConInsercion(int[] arrayDePosiciones, Tipo tipo) {
         if (this.ultimaCancionCargada == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
-        } else if (!this.estaOrdenadaPorTitulo) {
+        } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
             for (int i = 1; i < this.consultarCantidadDeCanciones(); i++) {
                 // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
-                int posicionActual = this.ordenadasPorTiempo[i];
+                int posicionActual = arrayDePosiciones[i];
                 int j = i -1;
 
                 // Mientras que haya registros en el array y el valor evaluado sea mayor que el valorActual, muevo el valor "para la izquierda"
-                while (j >= 0 && this.lista[this.ordenadasPorTiempo[j]].getTitulo().compareToIgnoreCase(this.lista[this.ordenadasPorTitulo[posicionActual]].getTitulo()) > 0) {
+                while (j >= 0 && this.lista[arrayDePosiciones[j]].getPorTipo(tipo).compareToIgnoreCase(this.lista[arrayDePosiciones[posicionActual]].getPorTipo(tipo)) > 0) {
                     // Realizo el movimiento y muevo el puntero j
-                    this.ordenadasPorTitulo[j +1] = j;
+                    arrayDePosiciones[j +1] = j;
                     j = j -1;
                 }
 
                 // Copiamos la posicionActual a su posición final y vamos a la proxima iteración
-                this.ordenadasPorTitulo[j +1] = posicionActual;
+                arrayDePosiciones[j +1] = posicionActual;
             }
 
-            this.setEstaOrdenadaPorTitulo(true);
+            this.setEstaOrdenadaPorTipo(tipo, true);
         }
-    }
 
-    private void ordenarPorTiempoConInsercion() {
-        if (this.ultimaCancionCargada == 0) {
-            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
-        } else if (!this.estaOrdenadaPorTiempo) {
-            for (int i = 1; i < this.consultarCantidadDeCanciones(); i++) {
-                // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
-                int valorActual = this.lista[this.ordenadasPorTiempo[i]].getDuracion();
-                int posicionActual = this.ordenadasPorTiempo[i];
-                int j = i -1;
-
-                // Mientras que haya registros en el array y el valor evaluado sea mayor que el valorActual, muevo el valor "para la izquierda"
-                while (j >= 0 && this.lista[this.ordenadasPorTiempo[j]].getDuracion() > valorActual) {
-                    // Realizo el movimiento y muevo el puntero j
-                    this.ordenadasPorTiempo[j +1] = j;
-                    j = j -1;
-                }
-
-                // Copiamos la posicionActual a su posición final y vamos a la proxima iteración
-                this.ordenadasPorTiempo[j +1] = posicionActual;
-            }
-
-            this.setEstaOrdenadaPorTiempo(true);
-        }
+        return arrayDePosiciones;
     }
 
 }
