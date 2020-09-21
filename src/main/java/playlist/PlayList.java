@@ -14,7 +14,7 @@ public class PlayList {
         if (cantidadDeCanciones <= 0) {
             // Aún no se vió Excepciones. Mostramos un mensaje y generamos la PlayList mínima
             System.out.println("La lista se debe iniciar con al menos una posición");
-            cantidadDeCanciones = 1;
+            cantidadDeCanciones = 10;
         } else if (cantidadDeCanciones > 10000) {
             System.out.println("La cantidad máxima de canciones es 10.000. Generando la lista con esa cantidad");
             cantidadDeCanciones = 10000;
@@ -47,7 +47,7 @@ public class PlayList {
         this.estaOrdenadaPorTitulo = valor;
     }
 
-    public int consultarCantidadDeCancionesCargadas() {
+    public int consultarCantidadDeCanciones() {
         return this.ultimaCancionCargada;
     }
 
@@ -55,12 +55,12 @@ public class PlayList {
         this.ultimaCancionCargada ++;
     }
 
-    private void cancionRemovida() {
+    private void cancionEliminada() {
         this.ultimaCancionCargada --;
     }
 
     public boolean agregarCancion(Cancion cancion) {
-        if (this.lista.length == this.consultarCantidadDeCancionesCargadas()) {
+        if (this.lista.length == this.consultarCantidadDeCanciones()) {
             System.out.println("No se puede agregar la canción ya que la lista ha alcanzado su límite máximo de " + this.lista.length);
             return false;
         } else {
@@ -68,17 +68,22 @@ public class PlayList {
                 this.estaOrdenadaPorTiempo &&
                 cancion.getDuracion() < this.lista[this.ultimaCancionCargada -1].getDuracion()
                 ) this.setEstaOrdenadaPorTiempo(false);
-            this.ordenadasPorTiempo[this.consultarCantidadDeCancionesCargadas()] = this.ultimaCancionCargada;
-            // Agregar manejo de orden (como el de arriba) para el titulo
-            // this.ordenadasPorTitulo[this.consultarCantidadDeCancionesCargadas()] = this.consultarCantidadDeCancionesCargadas() -1;
-            this.lista[this.consultarCantidadDeCancionesCargadas()] = cancion;
+            this.ordenadasPorTiempo[this.consultarCantidadDeCanciones()] = this.ultimaCancionCargada;
+
+            if (this.ultimaCancionCargada > 0 &&
+            this.estaOrdenadaPorTitulo &&
+            cancion.getTitulo().compareToIgnoreCase(this.lista[this.ultimaCancionCargada -1].getTitulo()) < 0
+            ) this.setEstaOrdenadaPorTitulo(false);
+            this.ordenadasPorTitulo[this.consultarCantidadDeCanciones()] = this.ultimaCancionCargada;
+
+            this.lista[this.consultarCantidadDeCanciones()] = cancion;
             this.cancionAgregada();
             return true;
         }
     }
 
     public boolean quitarUltimaCancion() {
-        return this.quitarCancion(this.consultarCantidadDeCancionesCargadas());
+        return this.quitarCancion(this.consultarCantidadDeCanciones());
     }
 
     public boolean quitarCancion(int posicion) {
@@ -87,10 +92,10 @@ public class PlayList {
             en la cola o "rellenamos" la posicion con un null
         */
         if (this.laCancionEstaCargada(posicion)) {
-            for (int i = posicion -1; i < this.consultarCantidadDeCancionesCargadas(); i++) {
+            for (int i = posicion -1; i < this.consultarCantidadDeCanciones(); i++) {
                 this.lista[i] = this.lista[i+1];
             }
-            this.cancionRemovida();
+            this.cancionEliminada();
             System.out.println("¡La canción fue removida!");
             return true;
         } else {
@@ -105,7 +110,7 @@ public class PlayList {
     }
 
     private boolean laCancionEstaCargada(int posicion) {
-        return (posicion -1 <= this.consultarCantidadDeCancionesCargadas() && this.lista[posicion -1] != null);
+        return (posicion -1 <= this.consultarCantidadDeCanciones() && this.lista[posicion -1] != null);
     }
 
     public String consultarTituloDeCancion(int posicion) {
@@ -125,24 +130,61 @@ public class PlayList {
         }
     }
 
-    // Se utilizan únicamente algortimos de ordenamiento vistos en Algoritmos y Programación 1, obviando Bubble por su pobre rendiemiento
-    private int[] ordenarPorTituloConSeleccion() {
-        int[] arregloDeEnteros = {0};
+    public void mostrarPlaylistOrdenadaPorTitulo() {
+        if (!this.estaOrdenadaPorTitulo) {
+            this.ordenarPorTituloConInsercion();
+        }
 
-        return arregloDeEnteros;
+        System.out.println("La lista ordenada por título es:");
+        for (int i = 0; i < this.ordenadasPorTitulo.length && this.ordenadasPorTitulo[i] != Integer.MAX_VALUE; i++) {
+            System.out.println("\t" + (i +1) + ". " + this.lista[this.ordenadasPorTitulo[i]].getTitulo() + ".");
+        }
+    }
+
+    //La lista ordenada por duración es:
+    //  1. Titulo: 120 segundos
+    //  2. Titulo: 120 segundos
+    //      Total: 240 segundos
+
+    // Se utilizan únicamente algortimos de ordenamiento vistos en Algoritmos y Programación 1, obviando Bubble por su pobre rendiemiento
+    private void ordenarPorTituloConSeleccion() {
+        if (this.consultarCantidadDeCanciones() == 0) {
+            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
+        } else if (!this.estaOrdenadaPorTitulo) {
+
+            for (int i = 0; i < this.consultarCantidadDeCanciones(); i++) {
+                // Declaro la variable para la posicion minima dentro del loop para que su scope sea lo menor posible
+                int posicionMenor = i;
+
+                for (int j = i +1; j < this.consultarCantidadDeCanciones(); j++) {
+                    // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
+                    if (this.lista[this.ordenadasPorTitulo[j]].getTitulo().compareToIgnoreCase(this.lista[this.ordenadasPorTitulo[posicionMenor]].getTitulo()) < 0) {
+                        posicionMenor = j;
+                    }
+                }
+
+                // Hago el reemplazo de valores en las posiciones que encontre, uso una variable auxiliar porque no me salio hacerlo con suma / resta
+                int temporaria = this.ordenadasPorTitulo[i];
+                this.ordenadasPorTitulo[i] = this.ordenadasPorTitulo[posicionMenor];
+                this.ordenadasPorTitulo[posicionMenor] = temporaria;
+            }
+        
+            this.setEstaOrdenadaPorTitulo(true);
+        }
+
     }
 
     private void ordenarPorTiempoConSeleccion() {
-        if (this.consultarCantidadDeCancionesCargadas() == 0) {
+        if (this.consultarCantidadDeCanciones() == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.estaOrdenadaPorTiempo) {
 
-            for (int i = 0; i < this.consultarCantidadDeCancionesCargadas(); i++) {
+            for (int i = 0; i < this.consultarCantidadDeCanciones(); i++) {
                 // Declaro la variable para la posicion minima dentro del loop para que su scope sea lo menor posible
                 int duracionMinima = this.lista[this.ordenadasPorTiempo[i]].getDuracion();
                 int posicionMinima = i;
 
-                for (int j = i +1; j < this.consultarCantidadDeCancionesCargadas(); j++) {
+                for (int j = i +1; j < this.consultarCantidadDeCanciones(); j++) {
                     // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
                     if (this.lista[this.ordenadasPorTiempo[j]].getDuracion() < duracionMinima) {
                         duracionMinima = this.lista[this.ordenadasPorTiempo[j]].getDuracion();
@@ -160,17 +202,35 @@ public class PlayList {
         }
     }
 
-    private int[] ordenarPorTituloConInsercion() {
-        int[] arregloDeEnteros = {0};
+    private void ordenarPorTituloConInsercion() {
+        if (this.ultimaCancionCargada == 0) {
+            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
+        } else if (!this.estaOrdenadaPorTitulo) {
+            for (int i = 1; i < this.consultarCantidadDeCanciones(); i++) {
+                // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
+                int posicionActual = this.ordenadasPorTiempo[i];
+                int j = i -1;
 
-        return arregloDeEnteros;
+                // Mientras que haya registros en el array y el valor evaluado sea mayor que el valorActual, muevo el valor "para la izquierda"
+                while (j >= 0 && this.lista[this.ordenadasPorTiempo[j]].getTitulo().compareToIgnoreCase(this.lista[this.ordenadasPorTitulo[posicionActual]].getTitulo()) > 0) {
+                    // Realizo el movimiento y muevo el puntero j
+                    this.ordenadasPorTitulo[j +1] = j;
+                    j = j -1;
+                }
+
+                // Copiamos la posicionActual a su posición final y vamos a la proxima iteración
+                this.ordenadasPorTitulo[j +1] = posicionActual;
+            }
+
+            this.setEstaOrdenadaPorTitulo(true);
+        }
     }
 
     private void ordenarPorTiempoConInsercion() {
         if (this.ultimaCancionCargada == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.estaOrdenadaPorTiempo) {
-            for (int i = 1; i < this.consultarCantidadDeCancionesCargadas(); i++) {
+            for (int i = 1; i < this.consultarCantidadDeCanciones(); i++) {
                 // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
                 int valorActual = this.lista[this.ordenadasPorTiempo[i]].getDuracion();
                 int posicionActual = this.ordenadasPorTiempo[i];

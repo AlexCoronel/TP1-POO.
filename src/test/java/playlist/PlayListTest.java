@@ -25,18 +25,22 @@ public class PlayListTest {
     public void verificaQueLaCargaDefaultSeaCorrecta() {
         new PlayList();
 
-        assertEquals("Generando la lista con 1.000 posiciones\n", salidasDeConsola.toString());
-        assertEquals(0, playlistDefault.consultarCantidadDeCancionesCargadas());
+        for (int i = 0; i < 1001; i++) {
+            playlistDefault.agregarCancion(cancionTest);
+        }
+
+        assertEquals("Generando la lista con 1.000 posiciones\nNo se puede agregar la canción ya que la lista ha alcanzado su límite máximo de 1000\n", salidasDeConsola.toString());
     }
 
     @Test
     public void verificaQueConParametrosErroneosSeCreaPlaylistMinima() {
-        PlayList playlistErrones = new PlayList(-10);
+        PlayList playlistErronea = new PlayList(-10);
 
-        playlistErrones.agregarCancion(cancionTest);
-        playlistErrones.agregarCancion(cancionTest);
+        for (int i = 0; i < 11; i++) {
+            playlistErronea.agregarCancion(cancionTest);
+        }
 
-        assertEquals("La lista se debe iniciar con al menos una posición\nNo se puede agregar la canción ya que la lista ha alcanzado su límite máximo de 1\n", salidasDeConsola.toString());
+        assertEquals("La lista se debe iniciar con al menos una posición\nNo se puede agregar la canción ya que la lista ha alcanzado su límite máximo de 10\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -59,7 +63,7 @@ public class PlayListTest {
     }
 
     @Test
-    public void verificaQueElOrdenamientoSeaCorrecto() {
+    public void verificaQueElOrdenamientoPorTiempoSeaCorrecto() {
         Cancion cancionLarga = new Cancion("Titulo largo", 300);
         Cancion cancionCorta = new Cancion("Titulo corto", 90);
 
@@ -69,6 +73,33 @@ public class PlayListTest {
 
         playlistDefault.mostrarPlaylistOrdenadaPorTiempo();
         assertEquals("La lista ordenada por duración es:\n\t1. Titulo corto: 90 segundos\n\t2. Titulo de cancion: 145 segundos\n\t3. Titulo largo: 300 segundos\n", salidasDeConsola.toString());
+    }
+
+    @Test
+    public void verificaQueElOrdenamientoPorTituloSeaCorrecto() {
+        Cancion cancionCorta = new Cancion("Título corto", 90);
+        Cancion cancionIgual = new Cancion("Título igual", 30);
+        Cancion cancionMasLarga = new Cancion("Título más largo", 300);
+        Cancion cancionTodaviaMasLarga = new Cancion("Título todavía más largo", 200);
+
+        playlistDefault.agregarCancion(cancionIgual);
+        playlistDefault.agregarCancion(cancionCorta);
+        playlistDefault.agregarCancion(cancionIgual);
+        playlistDefault.agregarCancion(cancionTodaviaMasLarga);
+        playlistDefault.agregarCancion(cancionMasLarga);
+
+        playlistDefault.mostrarPlaylistOrdenadaPorTitulo();
+        assertEquals("La lista ordenada por título es:\n\t1. Título corto.\n\t2. Título igual.\n\t3. Título igual.\n\t4. Título más largo.\n\t5. Título todavía más largo.\n", salidasDeConsola.toString());
+    }
+
+    @Test
+    public void verificaVelocidadDeAlgoritmoDeOrdenamiento() {
+        PlayList playlistVelocidad = new PlayList(10000);
+        for (int i = 0; i < 10000; i++) {
+            playlistVelocidad.agregarCancion(cancionTest);
+        }
+
+        playlistVelocidad.mostrarPlaylistOrdenadaPorTiempo();
     }
 
 }
