@@ -1,5 +1,4 @@
 package playlist;
-import playlist.Tipo;
 
 public class Cancion {
     private String titulo;
@@ -62,16 +61,20 @@ public class Cancion {
     public String getPorTipo(Tipo tipo) {
         switch (tipo) {
             case TITULO:
-                return this.getTitulo();
+                String titulo = this.getTitulo();
+                return titulo == null ? "" : titulo;
 
             case DURACION:
-                return this.getDuracion().toString();
+                String duracion = this.getDuracion().toString();
+                return duracion == null ? "" : duracion;
         
             case ARTISTA:
-                return this.getArtista();
+                String artista = this.getArtista();
+                return artista == null ? "" : artista;
             
             case ALBUM:
-                return this.getAlbum();
+                String album = this.getAlbum();
+                return album == null ? "" : album;
 
             default:
                 return "El tipo " + tipo + "no existe";

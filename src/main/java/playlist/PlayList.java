@@ -11,9 +11,9 @@ public class PlayList {
     private boolean estaOrdenadaPorTitulo;
 
     PlayList(int cantidadDeCanciones) {
-        if (cantidadDeCanciones <= 0) {
+        if (cantidadDeCanciones <= 1) {
             // Aún no se vió Excepciones. Mostramos un mensaje y generamos la PlayList mínima
-            System.out.println("La lista se debe iniciar con al menos una posición");
+            System.out.println("Generar una lista de menos de dos posiciones carece de sentido. Inicializándola arbitrariamente con 10 posiciones");
             cantidadDeCanciones = 10;
         } else if (cantidadDeCanciones > 10000) {
             System.out.println("La cantidad máxima de canciones es 10.000. Generando la lista con esa cantidad");
@@ -102,11 +102,11 @@ public class PlayList {
         }
     }
 
-    public boolean quitarUltimaCancion() {
+    private boolean quitarUltimaCancion() {
         return this.quitarCancion(this.consultarCantidadDeCanciones());
     }
 
-    public boolean quitarCancion(int posicion) {
+    private boolean quitarCancion(int posicion) {
         /*
             Decidir si dejamos el contenido de la ultima cancion
             en la cola o "rellenamos" la posicion con un null
@@ -139,17 +139,83 @@ public class PlayList {
         return null;
     }
 
-    public void mostrarPlaylistOrdenadaPorArtista() {
+    private int[] artistasUnicos() {
+        int[] copiaDeOrdenadasPorArtista = this.ordenadasPorArtista;
+
+        for (int i = 0; i < this.consultarCantidadDeCanciones(); i++) {
+            if (copiaDeOrdenadasPorArtista[i] == Integer.MAX_VALUE) continue;
+            for (int j = i +1; j < this.consultarCantidadDeCanciones() -1; j ++) {
+                if (copiaDeOrdenadasPorArtista[j] == Integer.MAX_VALUE) continue;
+                if (this.lista[copiaDeOrdenadasPorArtista[i]].getPorTipo(Tipo.ARTISTA).compareToIgnoreCase(this.lista[copiaDeOrdenadasPorArtista[j]].getPorTipo(Tipo.ARTISTA)) == 0) copiaDeOrdenadasPorArtista[j] = Integer.MAX_VALUE;
+            }
+        }
+
+        Arrays.sort(copiaDeOrdenadasPorArtista);
+
+        return copiaDeOrdenadasPorArtista;
+    }
+
+    public void mostrarPlaylistOrdenadaPorArtistaYtitulo() {
         if (!this.estaOrdenadaPorArtista) {
             this.ordenarConSeleccion(this.ordenadasPorArtista, Tipo.ARTISTA);
         }
 
-        System.out.println("La lista ordenada por artista es:");
+        if (!this.estaOrdenadaPorTitulo) {
+            this.ordenarConSeleccion(this.ordenadasPorTitulo, Tipo.TITULO);
+        }
+
+        int[] artistasUnicos = this.artistasUnicos();
+        String artistaPrevio = "";
+
+        System.out.println("La lista ordenada por artista y título es:");
+        for (int i = 0; i < this.consultarCantidadDeCanciones() && artistasUnicos[i] != Integer.MAX_VALUE; i++) {
+
+            String artista = this.lista[artistasUnicos[i]].getArtista();
+            if (artista == null) {
+                artista = "Sin artista:";
+            } else {
+                artista = artista + ":";
+            }
+
+            boolean esElMismoArtista = artista.compareTo(artistaPrevio) == 0;
+
+            if (!esElMismoArtista) {
+                artistaPrevio = artista;
+                System.out.println("\t" + artista);
+            }
+
+            for (int j = 0; j < this.ultimaCancionCargada; j++) {
+                if (this.lista[this.ordenadasPorTitulo[j]].getArtista() == this.lista[artistasUnicos[i]].getArtista()) System.out.println("\t\t" + this.lista[this.ordenadasPorTitulo[j]].getTitulo());
+            }
+        }
+    }
+
+    public void mostrarPlaylistOrdenadaPorArtistaAlbumYtitulo() {
+        if (!this.estaOrdenadaPorArtista) {
+            this.ordenarConSeleccion(this.ordenadasPorArtista, Tipo.ARTISTA);
+        }
+
+        if (!this.estaOrdenadaPorTitulo) {
+            this.ordenarConSeleccion(this.ordenadasPorTitulo, Tipo.TITULO);
+        }
+
+        System.out.println("La lista ordenada por artista, álbum y título es:");
+        String artistaPrevio = "";
+        String albumPrevio = "";
         for (int i = 0; i < this.ordenadasPorArtista.length && this.ordenadasPorArtista[i] != Integer.MAX_VALUE; i++) {
-            String artista = this.lista[this.ordenadasPorArtista[i]].getArtista() + ":";
-            if (artista == null + ":") artista = "Sin artista:";
-            if (i != 0 && artista == this.lista[this.ordenadasPorArtista[i -1]].getArtista() + ":") artista = "\t";
-            System.out.println("\t" + (i +1) + ". " + artista);
+            String artista = this.lista[this.ordenadasPorArtista[i]].getArtista();
+            if (artista == null) {
+                artista = "Sin artista:";
+            } else {
+                artista = artista + ":";
+            }
+
+            boolean esElMismoArtista = artista.compareTo(artistaPrevio) == 0;
+
+            if (!esElMismoArtista) {
+                artistaPrevio = artista;
+                System.out.println("\t" + artista);
+            }
 
             String album = this.lista[this.ordenadasPorArtista[i]].getAlbum();
             if (album == null) {
@@ -157,8 +223,11 @@ public class PlayList {
             } else {
                 album = "\t↳ " + album;
             }
-            if (i != 0 && album == "\t↳ " + this.lista[this.ordenadasPorArtista[i -1]].getAlbum()) album = "\t\t";
-            System.out.println("\t" + album);
+
+            if (!esElMismoArtista || album.compareTo(albumPrevio) != 0) {
+                albumPrevio = album;
+                System.out.println("\t" + album);
+            }
 
             System.out.println("\t\t\t" + this.lista[this.ordenadasPorArtista[i]].getTitulo() + " - " + this.lista[this.ordenadasPorArtista[i]].getDuracion() + " segundos");
         }
@@ -188,7 +257,9 @@ public class PlayList {
 
                 for (int j = i +1; j < this.consultarCantidadDeCanciones(); j++) {
                     // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
-                    if (this.lista[arrayDePosiciones[j]].getPorTipo(tipo).compareToIgnoreCase(menorValor) < 0) {
+                    if (menorValor != null &&
+                        this.lista[arrayDePosiciones[j]].getPorTipo(tipo) != null &&
+                        this.lista[arrayDePosiciones[j]].getPorTipo(tipo).compareToIgnoreCase(menorValor) < 0) {
                         menorValor = this.lista[arrayDePosiciones[j]].getPorTipo(tipo);
                         posicionMinima = j;
                     }
@@ -231,5 +302,4 @@ public class PlayList {
 
         return arrayDePosiciones;
     }
-
 }
