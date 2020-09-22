@@ -58,21 +58,21 @@ public class Cancion {
         if (this.duracion > 0) this.artista = artista;
     }
 
-    public String getPorTipo(Tipo tipo) {
+    public String getPorTipo(String tipo) {
         switch (tipo) {
-            case TITULO:
+            case "TITULO":
                 String titulo = this.getTitulo();
                 return titulo == null ? "" : titulo;
 
-            case DURACION:
+            case "DURACION":
                 String duracion = this.getDuracion().toString();
                 return duracion == null ? "" : duracion;
         
-            case ARTISTA:
+            case "ARTISTA":
                 String artista = this.getArtista();
                 return artista == null ? "" : artista;
             
-            case ALBUM:
+            case "ALBUM":
                 String album = this.getAlbum();
                 return album == null ? "" : album;
 
