@@ -22,7 +22,7 @@ public class PlayListTest {
 
     // Tests de Constructores
     @Test
-    public void verificaQueLaCargaDefaultSeaCorrecta() {
+    public void laCargaDefaultEsCorrecta() {
         new PlayList();
 
         for (int i = 0; i < 1001; i++) {
@@ -40,9 +40,10 @@ public class PlayListTest {
             playlistErronea.agregarCancion(cancionTest);
         }
 
-        assertEquals("La lista se debe iniciar con al menos una posición\nNo se puede agregar la canción ya que la lista ha alcanzado su límite máximo de 10\n", salidasDeConsola.toString());
+        assertEquals("Generar una lista de menos de dos posiciones carece de sentido. Inicializándola arbitrariamente con 10 posiciones\nNo se puede agregar la canción ya que la lista ha alcanzado su límite máximo de 10\n", salidasDeConsola.toString());
     }
 
+    // Tests de métodos
     @Test
     public void verificaQueSePuedaCargarUnaCancion() {
         playlistDefault.agregarCancion(cancionTest);
@@ -63,16 +64,43 @@ public class PlayListTest {
     }
 
     @Test
-    public void verificaQueElOrdenamientoPorTiempoSeaCorrecto() {
-        Cancion cancionLarga = new Cancion("Titulo largo", 300);
-        Cancion cancionCorta = new Cancion("Titulo corto", 90);
+    public void verificaQueElOrdenamientoPorArtistaYtituloSeaCorrecto() {
+        Cancion cancionLarga = new Cancion("Titulo largo", 300, "Primer Artista");
+        Cancion cancionCorta = new Cancion("Titulo corto", 90, "Segundo Artista");
+        Cancion sinArtistaNiAlbum = new Cancion("Titulo de cancion", 320);
+        Cancion sinArtistaConAlbum = new Cancion("Titulo de cancion", 110, null, "Titulo Del Album");
+        Cancion sinArtistaConAlbum2 = new Cancion("Titulo de cancion 2", 120, null, "Titulo Del Album");
 
         playlistDefault.agregarCancion(cancionTest);
         playlistDefault.agregarCancion(cancionLarga);
         playlistDefault.agregarCancion(cancionCorta);
+        playlistDefault.agregarCancion(sinArtistaNiAlbum);
+        playlistDefault.agregarCancion(sinArtistaConAlbum);
+        playlistDefault.agregarCancion(sinArtistaConAlbum2);
+        playlistDefault.agregarCancion(cancionTest);
 
-        playlistDefault.mostrarPlaylistOrdenadaPorTiempo();
-        assertEquals("La lista ordenada por duración es:\n\t1. Titulo corto: 90 segundos\n\t2. Titulo de cancion: 145 segundos\n\t3. Titulo largo: 300 segundos\n", salidasDeConsola.toString());
+        playlistDefault.mostrarPlaylistOrdenadaPorArtistaYtitulo();
+        assertEquals("La lista ordenada por artista y título es:\n\tEl artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\tPrimer Artista:\n\t\tTitulo largo\n\tSegundo Artista:\n\t\tTitulo corto\n\tSin artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\t\tTitulo de cancion 2\n", salidasDeConsola.toString());
+    }
+
+    @Test
+    public void verificaQueElOrdenamientoPorArtistaAlbumYtituloSeaCorrecto() {
+        Cancion cancionLarga = new Cancion("Titulo largo", 300, "Primer Artista");
+        Cancion cancionCorta = new Cancion("Titulo corto", 90, "Segundo Artista");
+        Cancion sinArtistaNiAlbum = new Cancion("Titulo de cancion", 320);
+        Cancion sinArtistaConAlbum = new Cancion("Titulo de cancion", 110, null, "Titulo Del Album");
+        Cancion sinArtistaConAlbum2 = new Cancion("Titulo de cancion 2", 120, null, "Titulo Del Album");
+
+        playlistDefault.agregarCancion(cancionTest);
+        playlistDefault.agregarCancion(cancionLarga);
+        playlistDefault.agregarCancion(cancionCorta);
+        playlistDefault.agregarCancion(sinArtistaNiAlbum);
+        playlistDefault.agregarCancion(sinArtistaConAlbum);
+        playlistDefault.agregarCancion(sinArtistaConAlbum2);
+        playlistDefault.agregarCancion(cancionTest);
+
+        playlistDefault.mostrarPlaylistOrdenadaPorArtistaAlbumYtitulo();
+        assertEquals("La lista ordenada por artista, álbum y título es:\n\tSin artista:\n\t\t↳ Álbum desconocido\n\t\t\tTitulo de cancion - 320 segundos\n\t\t↳ Titulo Del Album\n\t\t\tTitulo de cancion - 110 segundos\n\t\t\tTitulo de cancion 2 - 120 segundos\n\tEl artista:\n\t\t↳ El album\n\t\t\tTitulo de cancion - 145 segundos\n\t\t\tTitulo de cancion - 145 segundos\n\tPrimer Artista:\n\t\t↳ Álbum desconocido\n\t\t\tTitulo largo - 300 segundos\n\tSegundo Artista:\n\t\t↳ Álbum desconocido\n\t\t\tTitulo corto - 90 segundos\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -90,16 +118,6 @@ public class PlayListTest {
 
         playlistDefault.mostrarPlaylistOrdenadaPorTitulo();
         assertEquals("La lista ordenada por título es:\n\t1. Título corto.\n\t2. Título igual.\n\t3. Título igual.\n\t4. Título más largo.\n\t5. Título todavía más largo.\n", salidasDeConsola.toString());
-    }
-
-    @Test
-    public void verificaVelocidadDeAlgoritmoDeOrdenamiento() {
-        PlayList playlistVelocidad = new PlayList(10000);
-        for (int i = 0; i < 10000; i++) {
-            playlistVelocidad.agregarCancion(cancionTest);
-        }
-
-        playlistVelocidad.mostrarPlaylistOrdenadaPorTiempo();
     }
 
 }

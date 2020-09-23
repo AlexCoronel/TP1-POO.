@@ -4,7 +4,7 @@ public class Cancion {
     private String titulo;
     private String album;
     private String artista;
-    private int duracion;
+    private Integer duracion;
     
     Cancion(String titulo, int duracion) {
         this.setDuracion(duracion);
@@ -25,7 +25,7 @@ public class Cancion {
         return this.titulo;
     }
 
-    public int getDuracion() {
+    public Integer getDuracion() {
         return this.duracion;
     }
 
@@ -56,6 +56,29 @@ public class Cancion {
 
     private void setArtista(String artista) {
         if (this.duracion > 0) this.artista = artista;
+    }
+
+    public String getPorTipo(String tipo) {
+        switch (tipo) {
+            case "TITULO":
+                String titulo = this.getTitulo();
+                return titulo == null ? "" : titulo;
+
+            case "DURACION":
+                String duracion = this.getDuracion().toString();
+                return duracion == null ? "" : duracion;
+        
+            case "ARTISTA":
+                String artista = this.getArtista();
+                return artista == null ? "" : artista;
+            
+            case "ALBUM":
+                String album = this.getAlbum();
+                return album == null ? "" : album;
+
+            default:
+                return "El tipo " + tipo + "no existe";
+        }
     }
 
 }
