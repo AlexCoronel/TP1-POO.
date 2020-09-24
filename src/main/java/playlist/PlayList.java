@@ -1,6 +1,7 @@
 package playlist;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class PlayList {
     private Cancion[] lista;
@@ -9,6 +10,7 @@ public class PlayList {
     private int[] ordenadasPorTitulo;
     private boolean estaOrdenadaPorArtista;
     private boolean estaOrdenadaPorTitulo;
+    private boolean seMostroAyudaDeReproductor;
 
     PlayList(int cantidadDeCanciones) {
         if (cantidadDeCanciones <= 1) {
@@ -34,6 +36,11 @@ public class PlayList {
         // Generamos la lista con un tamaño "razonable" por default
         this(1000);
         System.out.println("Generando la lista con 1.000 posiciones");
+    }
+
+    PlayList(int cantidadDeCanciones, Cancion cancion) {
+        this(cantidadDeCanciones);
+        this.agregarCancion(cancion);
     }
 
     PlayList(Cancion cancion) {
@@ -66,8 +73,12 @@ public class PlayList {
         }
     }
 
-    public int consultarCantidadDeCanciones() {
+    private int getUltimaCancionCargada() {
         return this.ultimaCancionCargada;
+    }
+
+    public int consultarCantidadDeCancionesCargadas() {
+        return this.getUltimaCancionCargada();
     }
 
     private void cancionAgregada() {
@@ -79,7 +90,8 @@ public class PlayList {
     }
 
     public boolean agregarCancion(Cancion cancion) {
-        if (this.lista.length == this.consultarCantidadDeCanciones()) {
+        if (cancion == null) return false;
+        if (this.lista.length == this.getUltimaCancionCargada()) {
             System.out.println("No se puede agregar la canción ya que la lista ha alcanzado su límite máximo de " + this.lista.length);
             return false;
         } else {
@@ -88,31 +100,59 @@ public class PlayList {
                 this.estaOrdenadaPorArtista &&
                 cancion.getPorTipo("ARTISTA").compareToIgnoreCase(this.lista[this.ultimaCancionCargada -1].getPorTipo("ARTISTA")) < 0)
                 ) this.setEstaOrdenadaPorTipo("ARTISTA", false);
-            this.ordenadasPorArtista[this.consultarCantidadDeCanciones()] = this.ultimaCancionCargada;
+            this.ordenadasPorArtista[this.getUltimaCancionCargada()] = this.ultimaCancionCargada;
 
             if (this.ultimaCancionCargada > 0 &&
-            this.estaOrdenadaPorTitulo &&
-            cancion.getPorTipo("TITULO").compareToIgnoreCase(this.lista[this.ultimaCancionCargada -1].getPorTipo("TITULO")) < 0
-            ) this.setEstaOrdenadaPorTipo("TITULO", false);
-            this.ordenadasPorTitulo[this.consultarCantidadDeCanciones()] = this.ultimaCancionCargada;
+                this.estaOrdenadaPorTitulo &&
+                cancion.getPorTipo("TITULO").compareToIgnoreCase(this.lista[this.ultimaCancionCargada -1].getPorTipo("TITULO")) < 0
+                ) this.setEstaOrdenadaPorTipo("TITULO", false);
+            this.ordenadasPorTitulo[this.getUltimaCancionCargada()] = this.ultimaCancionCargada;
 
-            this.lista[this.consultarCantidadDeCanciones()] = cancion;
+            this.lista[this.getUltimaCancionCargada()] = cancion;
             this.cancionAgregada();
             return true;
         }
     }
 
-    private boolean quitarUltimaCancion() {
-        return this.quitarCancion(this.consultarCantidadDeCanciones());
+    public int consultarDuracionTotal(){
+        int duracionTotal = 0;
+        for (int i = 0; i < this.getUltimaCancionCargada(); i++){
+            duracionTotal += this.lista[i].getDuracion();
+        }
+
+        return duracionTotal;
     }
 
-    private boolean quitarCancion(int posicion) {
-        /*
-            Decidir si dejamos el contenido de la ultima cancion
-            en la cola o "rellenamos" la posicion con un null
-        */
+    public int consultarDuracion(String titulo){
+        if (this.getUltimaCancionCargada() == 0) return -1;
+
+        int duracionTotal = 0;
+        for (int i = 0; i < this.getUltimaCancionCargada(); i++){
+            if (this.lista[i].getPorTipo("TITULO").compareToIgnoreCase(titulo) == 0) duracionTotal += this.lista[i].getDuracion();
+        }
+
+        if (duracionTotal == 0) return -1;
+        return duracionTotal;
+    }
+
+    public boolean eliminarCancion(String titulo, String artista) {
+        if (titulo == null) titulo = "";
+        if (artista == null) artista = "";
+
+        for (int i = 0; i < this.getUltimaCancionCargada(); i++) {
+            if (this.lista[i].getPorTipo("TITULO").compareToIgnoreCase(titulo) == 0) {
+                if (this.lista[i].getPorTipo("ARTISTA").compareToIgnoreCase(artista) == 0) {
+                    return this.quitarCancionPorPosicion(i +1);
+                }
+            }
+        }
+        System.out.println("La canción buscada no se encontraba en la playlist");
+        return false;
+    }
+
+    private boolean quitarCancionPorPosicion(int posicion) {
         if (this.laCancionEstaCargada(posicion)) {
-            for (int i = posicion -1; i < this.consultarCantidadDeCanciones(); i++) {
+            for (int i = posicion -1; i < this.getUltimaCancionCargada(); i++) {
                 this.lista[i] = this.lista[i+1];
             }
             this.cancionEliminada();
@@ -124,13 +164,130 @@ public class PlayList {
         }
     }
 
+    public int consultarCancionMasCorta() {
+        if (getUltimaCancionCargada() == 0) {
+            System.out.println("Aún no se cargaron canciones a la playlist");
+            return -1;
+        }
+
+        int duracionMasCorta = Integer.MAX_VALUE;
+        int posicionMasCorta = 0;
+        for (int i = 0; i < getUltimaCancionCargada(); i ++) {
+            if (this.lista[i].getDuracion() < duracionMasCorta) {
+                duracionMasCorta = this.lista[i].getDuracion();
+                posicionMasCorta = i +1;
+            }
+        }
+
+        return posicionMasCorta;
+    }
+
+    public int consultarCancionMasLarga() {
+        if (getUltimaCancionCargada() == 0) {
+            System.out.println("Aún no se cargaron canciones a la playlist");
+            return -1;
+        }
+
+        int duracionMasLarga = Integer.MIN_VALUE;
+        int posicionMasLarga = 0;
+        for (int i = 0; i < getUltimaCancionCargada(); i ++) {
+            if (this.lista[i].getDuracion() > duracionMasLarga) {
+                duracionMasLarga = this.lista[i].getDuracion();
+                posicionMasLarga = i +1;
+            }
+        }
+
+        return posicionMasLarga;
+    }
+
+    public boolean reproducirPlaylist(String modo) {
+        if (getUltimaCancionCargada() == 0) {
+            System.out.println("Aún no se cargaron canciones a la playlist. No se puede reproducir");
+            return false;
+        } else {
+            if (modo == null) modo = "";
+    
+            switch (modo) {
+                case "ARTISTA":
+                    if (!this.estaOrdenadaPorArtista) this.ordenarConSeleccion(this.ordenadasPorArtista, "ARTISTA");
+                    this.reproducir(this.ordenadasPorArtista);
+                    break;
+            
+                case "TITULO":
+                    if (!this.estaOrdenadaPorTitulo) this.ordenarConSeleccion(this.ordenadasPorTitulo, "TITULO");
+                    this.reproducir(this.ordenadasPorTitulo);
+                    break;
+    
+                case "ALEATORIO":
+                    int[] arrayDeAleatorios = this.generadorDeAleatoriosRecursivo(new Random(), new int[this.getUltimaCancionCargada()], 0);
+                    this.reproducir(arrayDeAleatorios);
+                    break;
+    
+                default:
+                    if (!seMostroAyudaDeReproductor) {
+                        System.out.println("###############################");
+                        System.out.println("El reproductor admite cuatro modos de reproducción:");
+                        System.out.println("- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabético");
+                        System.out.println("- 'TITULO': Las canciones son reproducidas con sus Títulos en orden alfabético");
+                        System.out.println("- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio");
+                        System.out.println("- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList");
+                        System.out.println("\nNótese que el modo es case sensitive");
+                        System.out.println("###############################");
+                        this.seMostroAyudaDeReproductor = !this.seMostroAyudaDeReproductor;
+                    }
+                    this.reproducir(null);
+                    break;
+            }
+        }
+        return true;
+    }
+
+    private int[] generadorDeAleatoriosRecursivo(Random generador, int[] array, int indice) {
+        if (indice == this.getUltimaCancionCargada()) return array;
+
+        int numeroAleatorio = generador.nextInt(this.getUltimaCancionCargada());
+        boolean encontrado = false;
+
+        for (int i = 0; i < indice && !encontrado; i++) {
+            if (array[i] == numeroAleatorio) encontrado = true;
+        }
+
+        if (encontrado) {
+            this.generadorDeAleatoriosRecursivo(generador, array, indice);
+        } else {
+            array[indice] = numeroAleatorio;
+            this.generadorDeAleatoriosRecursivo(generador, array, indice +1);
+        }
+
+        // Nunca vamos a llegar a este punto pero lo agregamos para evitar errores de compilación
+        return array;
+    }
+
+    private void reproducir(int[] array) {
+        if (array == null) {
+            for (int posicion = 0; posicion < this.ultimaCancionCargada; posicion++) {
+                System.out.println("Reproduciendo " + this.lista[posicion].getPorTipo("TITULO") +
+                (((this.lista[posicion].getPorTipo("ARTISTA").compareTo("") == 0) ? "" : " de " + this.lista[posicion].getPorTipo("ARTISTA")) +
+                (((this.lista[posicion].getPorTipo("ALBUM").compareTo("") == 0) ? "" : " del álbum " + this.lista[posicion].getPorTipo("ALBUM")) +
+                " y su duración es de " + this.lista[posicion].getPorTipo("DURACION") + " segundos")));
+            }
+        } else {
+            for (int posicion = 0; posicion < this.ultimaCancionCargada; posicion++) {
+                System.out.println("Reproduciendo " + this.lista[array[posicion]].getPorTipo("TITULO") +
+                (((this.lista[array[posicion]].getPorTipo("ARTISTA").compareTo("") == 0) ? "" : " de " + this.lista[array[posicion]].getPorTipo("ARTISTA")) +
+                (((this.lista[array[posicion]].getPorTipo("ALBUM").compareTo("") == 0) ? "" : " del álbum " + this.lista[array[posicion]].getPorTipo("ALBUM")) +
+                " y su duración es de " + this.lista[array[posicion]].getPorTipo("DURACION") + " segundos")));
+            }
+        }
+    }
+
     private void mostrarErrorDeIndice(int posicion) {
         if (posicion > this.lista.length) System.out.println("La posición solicitada excede el tamaño de la playlist (" + this.lista.length + ")");
         else System.out.println("No hay ninguna canción cargada en la posición " + posicion);
     }
 
     private boolean laCancionEstaCargada(int posicion) {
-        return (posicion -1 <= this.consultarCantidadDeCanciones() && this.lista[posicion -1] != null);
+        return (posicion -1 <= this.getUltimaCancionCargada() && this.lista[posicion -1] != null);
     }
 
     public String consultarTituloDeCancion(int posicion) {
@@ -142,9 +299,9 @@ public class PlayList {
     private int[] artistasUnicos() {
         int[] copiaDeOrdenadasPorArtista = this.ordenadasPorArtista;
 
-        for (int i = 0; i < this.consultarCantidadDeCanciones(); i++) {
+        for (int i = 0; i < this.getUltimaCancionCargada(); i++) {
             if (copiaDeOrdenadasPorArtista[i] == Integer.MAX_VALUE) continue;
-            for (int j = i +1; j < this.consultarCantidadDeCanciones() -1; j ++) {
+            for (int j = i +1; j < this.getUltimaCancionCargada() -1; j ++) {
                 if (copiaDeOrdenadasPorArtista[j] == Integer.MAX_VALUE) continue;
                 if (this.lista[copiaDeOrdenadasPorArtista[i]].getPorTipo("ARTISTA").compareToIgnoreCase(this.lista[copiaDeOrdenadasPorArtista[j]].getPorTipo("ARTISTA")) == 0) copiaDeOrdenadasPorArtista[j] = Integer.MAX_VALUE;
             }
@@ -168,7 +325,7 @@ public class PlayList {
         String artistaPrevio = "";
 
         System.out.println("La lista ordenada por artista y título es:");
-        for (int i = 0; i < this.consultarCantidadDeCanciones() && artistasUnicos[i] != Integer.MAX_VALUE; i++) {
+        for (int i = 0; i < this.getUltimaCancionCargada() && artistasUnicos[i] != Integer.MAX_VALUE; i++) {
 
             String artista = this.lista[artistasUnicos[i]].getArtista();
             if (artista == null) {
@@ -177,9 +334,7 @@ public class PlayList {
                 artista = artista + ":";
             }
 
-            boolean esElMismoArtista = artista.compareTo(artistaPrevio) == 0;
-
-            if (!esElMismoArtista) {
+            if (artista.compareTo(artistaPrevio) != 0) {
                 artistaPrevio = artista;
                 System.out.println("\t" + artista);
             }
@@ -235,7 +390,7 @@ public class PlayList {
 
     public void mostrarPlaylistOrdenadaPorTitulo() {
         if (!this.estaOrdenadaPorTitulo) {
-            this.ordenarConInsercion(this.ordenadasPorTitulo, "TITULO");
+            this.ordenarConSeleccion(this.ordenadasPorTitulo, "TITULO");
         }
 
         System.out.println("La lista ordenada por título es:");
@@ -244,18 +399,39 @@ public class PlayList {
         }
     }
 
-    // Se utilizan únicamente algortimos de ordenamiento vistos en Algoritmos y Programación 1, obviando Bubble por su pobre rendiemiento
-    private int[] ordenarConSeleccion(int[] arrayDePosiciones, String tipo) {
-        if (this.consultarCantidadDeCanciones() == 0) {
+    // Se utilizan únicamente algortimos de ordenamiento vistos en Algoritmos y Programación 1
+    private int[] ordenarConBurbujeo(int[] arrayDePosiciones, String tipo) {
+        if (this.getUltimaCancionCargada() == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
 
-            for (int i = 0; i < this.consultarCantidadDeCanciones(); i++) {
+            // El primer for debe recorrer el array una vez, el segundo lo hará para cada posición de i
+            for (int i = 0; i < this.getUltimaCancionCargada(); i++) {
+                for (int j = 0; j < this.getUltimaCancionCargada() -i -1; j++) {
+                    // Si el tamaño del primero es mayor a la del segundo (adyacente), se intercambian valores
+                    if (this.lista[arrayDePosiciones[j]].getPorTipo(tipo).compareToIgnoreCase(this.lista[arrayDePosiciones[j +1]].getPorTipo(tipo)) > 0) {
+                        int temporaria = arrayDePosiciones[j];
+                        arrayDePosiciones[j] = arrayDePosiciones[j +1];
+                        arrayDePosiciones[j +1] = temporaria;
+                    }
+                }
+            }
+        }
+
+        return arrayDePosiciones;
+    }
+
+    private int[] ordenarConSeleccion(int[] arrayDePosiciones, String tipo) {
+        if (this.getUltimaCancionCargada() == 0) {
+            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
+        } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
+
+            for (int i = 0; i < this.getUltimaCancionCargada(); i++) {
                 // Declaro la variable para la posicion minima dentro del loop para que su scope sea lo menor posible
                 String menorValor = this.lista[arrayDePosiciones[i]].getPorTipo(tipo);
                 int posicionMinima = i;
 
-                for (int j = i +1; j < this.consultarCantidadDeCanciones(); j++) {
+                for (int j = i +1; j < this.getUltimaCancionCargada(); j++) {
                     // Si el valor en la posicion j es menor al que estaba en la posicion minima, lo asigno como nueva minima
                     if (menorValor != null &&
                         this.lista[arrayDePosiciones[j]].getPorTipo(tipo) != null &&
@@ -281,7 +457,7 @@ public class PlayList {
         if (this.ultimaCancionCargada == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
-            for (int i = 1; i < this.consultarCantidadDeCanciones(); i++) {
+            for (int i = 1; i < this.getUltimaCancionCargada(); i++) {
                 // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
                 int posicionActual = arrayDePosiciones[i];
                 int j = i -1;
