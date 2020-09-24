@@ -38,6 +38,11 @@ public class PlayList {
         System.out.println("Generando la lista con 1.000 posiciones");
     }
 
+    PlayList(int cantidadDeCanciones, Cancion cancion) {
+        this(cantidadDeCanciones);
+        this.agregarCancion(cancion);
+    }
+
     PlayList(Cancion cancion) {
         this();
         this.agregarCancion(cancion);
@@ -159,31 +164,57 @@ public class PlayList {
         }
     }
 
+    public int consultarCancionMasCorta() {
+        if (getUltimaCancionCargada() == 0) {
+            System.out.println("Aún no se cargaron canciones a la playlist");
+            return -1;
+        }
+
+        int duracionMasCorta = Integer.MAX_VALUE;
+        int posicionMasCorta = 0;
+        for (int i = 0; i < getUltimaCancionCargada(); i ++) {
+            if (this.lista[i].getDuracion() < duracionMasCorta) {
+                duracionMasCorta = this.lista[i].getDuracion();
+                posicionMasCorta = i +1;
+            }
+        }
+
+        return posicionMasCorta;
+    }
+
+    public int consultarCancionMasLarga() {
+        if (getUltimaCancionCargada() == 0) {
+            System.out.println("Aún no se cargaron canciones a la playlist");
+            return -1;
+        }
+
+        int duracionMasLarga = Integer.MIN_VALUE;
+        int posicionMasLarga = 0;
+        for (int i = 0; i < getUltimaCancionCargada(); i ++) {
+            if (this.lista[i].getDuracion() > duracionMasLarga) {
+                duracionMasLarga = this.lista[i].getDuracion();
+                posicionMasLarga = i +1;
+            }
+        }
+
+        return posicionMasLarga;
+    }
+
     public boolean reproducirPlaylist(String modo) {
         if (getUltimaCancionCargada() == 0) {
             System.out.println("Aún no se cargaron canciones a la playlist. No se puede reproducir");
             return false;
         } else {
-            if (!seMostroAyudaDeReproductor) {
-                System.out.println("###############################");
-                System.out.println("El reproductor admite cuatro modos de reproducción:");
-                System.out.println("- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabético");
-                System.out.println("- 'TITULO': Las canciones son reproducidas con sus Títulos en orden alfabético");
-                System.out.println("- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio");
-                System.out.println("- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList");
-                System.out.println("\nNótese que el modo es case sensitive");
-                System.out.println("###############################");
-                this.seMostroAyudaDeReproductor = !this.seMostroAyudaDeReproductor;
-            }
-
             if (modo == null) modo = "";
     
             switch (modo) {
                 case "ARTISTA":
+                    if (!this.estaOrdenadaPorArtista) this.ordenarConSeleccion(this.ordenadasPorArtista, "ARTISTA");
                     this.reproducir(this.ordenadasPorArtista);
                     break;
             
                 case "TITULO":
+                    if (!this.estaOrdenadaPorTitulo) this.ordenarConSeleccion(this.ordenadasPorTitulo, "TITULO");
                     this.reproducir(this.ordenadasPorTitulo);
                     break;
     
@@ -193,6 +224,17 @@ public class PlayList {
                     break;
     
                 default:
+                    if (!seMostroAyudaDeReproductor) {
+                        System.out.println("###############################");
+                        System.out.println("El reproductor admite cuatro modos de reproducción:");
+                        System.out.println("- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabético");
+                        System.out.println("- 'TITULO': Las canciones son reproducidas con sus Títulos en orden alfabético");
+                        System.out.println("- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio");
+                        System.out.println("- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList");
+                        System.out.println("\nNótese que el modo es case sensitive");
+                        System.out.println("###############################");
+                        this.seMostroAyudaDeReproductor = !this.seMostroAyudaDeReproductor;
+                    }
                     this.reproducir(null);
                     break;
             }
@@ -358,7 +400,7 @@ public class PlayList {
     }
 
     // Se utilizan únicamente algortimos de ordenamiento vistos en Algoritmos y Programación 1
-    private int[] ordenarConBurbuja(int[] arrayDePosiciones, String tipo) {
+    private int[] ordenarConBurbujeo(int[] arrayDePosiciones, String tipo) {
         if (this.getUltimaCancionCargada() == 0) {
             System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
