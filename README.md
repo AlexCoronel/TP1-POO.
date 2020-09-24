@@ -10,6 +10,7 @@
 
 ## Decisiones de diseño tomadas
 
+1) Eliminacion: Se elimina por Titulo de cancion y artista. Si hay mas de un resultado, eliminamos el primer resultado encontrado. Al eliminar, no rellenamos con null el ultimo espacio "liberado"
 TODO: Una vez realizado el UML, agregar las decisiones de diseño tomadas y revisarlo antes de entregar.
 
 ## Descripción de archivos .java

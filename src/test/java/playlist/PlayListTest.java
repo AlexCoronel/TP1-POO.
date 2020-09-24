@@ -52,15 +52,60 @@ public class PlayListTest {
     }
 
     @Test
-    public void verificaQueDevuelvaNullYmuestreErrorCuandoAccedemosAunaPosicionVacia() {
-        assertEquals(null, playlistDefault.consultarTituloDeCancion(10));
-        assertEquals("No hay ninguna canción cargada en la posición 10\n", salidasDeConsola.toString());
+    public void verificaQueSePuedanAgregarCancionesHastaElMaximoAdmitido() {
+        for (int i = 0; i < 1000; i++) playlistDefault.agregarCancion(cancionTest);
+
+        assertEquals("Titulo de cancion", playlistDefault.consultarTituloDeCancion(1000));
     }
 
     @Test
-    public void verificaQueDevuelvaNullYmuestreErrorCuandoAccedemosAunaPosicionMayorQueLaPlaylist() {
-        assertEquals(null, playlistDefault.consultarTituloDeCancion(10001));
-        assertEquals("La posición solicitada excede el tamaño de la playlist (1000)\n", salidasDeConsola.toString());
+    public void verificaQueSePuedaConsultarLaDuracionTotalPorTitulo() {
+        for (int i = 0; i < 10; i++) playlistDefault.agregarCancion(cancionTest);
+        playlistDefault.agregarCancion(new Cancion("Titulo corto", 90, "Segundo Artista"));
+
+        assertEquals(1450, playlistDefault.consultarDuracion("Titulo de cancion"));
+    }
+
+    @Test
+    public void verificaQueSePuedaEliminarUnaCancion() {
+        for (int i = 0; i < 10; i++) playlistDefault.agregarCancion(cancionTest);
+        playlistDefault.agregarCancion(new Cancion("Titulo corto", 90, "Segundo Artista"));
+
+        assertEquals("Titulo corto", playlistDefault.consultarTituloDeCancion(11));
+        assertEquals(true, playlistDefault.eliminarCancion("Titulo de cancion", "El artista"));
+        assertEquals("Titulo corto", playlistDefault.consultarTituloDeCancion(10));
+    }
+
+    @Test
+    public void verificaQueSePuedaConsultarLaDuracionTotal() {
+        for (int i = 0; i < 10; i++) playlistDefault.agregarCancion(cancionTest);
+        playlistDefault.agregarCancion(new Cancion("Titulo corto", 90, "Segundo Artista"));
+
+        assertEquals(1540, playlistDefault.consultarDuracionTotal());
+    }
+
+    @Test
+    public void verificaQueSePuedaConsultarLaCantidadDeCanciones() {
+        for (int i = 0; i < 10; i++) playlistDefault.agregarCancion(cancionTest);
+
+        assertEquals(10, playlistDefault.consultarCantidadDeCancionesCargadas());
+    }
+
+    @Test
+    public void verificaQueElOrdenamientoPorTituloSeaCorrecto() {
+        Cancion cancionCorta = new Cancion("Título corto", 90);
+        Cancion cancionIgual = new Cancion("Título igual", 30);
+        Cancion cancionMasLarga = new Cancion("Título más largo", 300);
+        Cancion cancionTodaviaMasLarga = new Cancion("Título todavía más largo", 200);
+
+        playlistDefault.agregarCancion(cancionIgual);
+        playlistDefault.agregarCancion(cancionCorta);
+        playlistDefault.agregarCancion(cancionIgual);
+        playlistDefault.agregarCancion(cancionTodaviaMasLarga);
+        playlistDefault.agregarCancion(cancionMasLarga);
+
+        playlistDefault.mostrarPlaylistOrdenadaPorTitulo();
+        assertEquals("La lista ordenada por título es:\n\t1. Título corto.\n\t2. Título igual.\n\t3. Título igual.\n\t4. Título más largo.\n\t5. Título todavía más largo.\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -83,6 +128,28 @@ public class PlayListTest {
         assertEquals("La lista ordenada por artista y título es:\n\tEl artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\tPrimer Artista:\n\t\tTitulo largo\n\tSegundo Artista:\n\t\tTitulo corto\n\tSin artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\t\tTitulo de cancion 2\n", salidasDeConsola.toString());
     }
 
+/*
+    Agregar tests para canciones de menor / mayor duracion y para las distintos tipos de reproducciones
+*/
+
+
+
+
+
+
+
+    @Test
+    public void verificaQueDevuelvaNullYmuestreErrorCuandoAccedemosAunaPosicionVacia() {
+        assertEquals(null, playlistDefault.consultarTituloDeCancion(10));
+        assertEquals("No hay ninguna canción cargada en la posición 10\n", salidasDeConsola.toString());
+    }
+
+    @Test
+    public void verificaQueDevuelvaNullYmuestreErrorCuandoAccedemosAunaPosicionMayorQueLaPlaylist() {
+        assertEquals(null, playlistDefault.consultarTituloDeCancion(10001));
+        assertEquals("La posición solicitada excede el tamaño de la playlist (1000)\n", salidasDeConsola.toString());
+    }
+
     @Test
     public void verificaQueElOrdenamientoPorArtistaAlbumYtituloSeaCorrecto() {
         Cancion cancionLarga = new Cancion("Titulo largo", 300, "Primer Artista");
@@ -101,23 +168,6 @@ public class PlayListTest {
 
         playlistDefault.mostrarPlaylistOrdenadaPorArtistaAlbumYtitulo();
         assertEquals("La lista ordenada por artista, álbum y título es:\n\tSin artista:\n\t\t↳ Álbum desconocido\n\t\t\tTitulo de cancion - 320 segundos\n\t\t↳ Titulo Del Album\n\t\t\tTitulo de cancion - 110 segundos\n\t\t\tTitulo de cancion 2 - 120 segundos\n\tEl artista:\n\t\t↳ El album\n\t\t\tTitulo de cancion - 145 segundos\n\t\t\tTitulo de cancion - 145 segundos\n\tPrimer Artista:\n\t\t↳ Álbum desconocido\n\t\t\tTitulo largo - 300 segundos\n\tSegundo Artista:\n\t\t↳ Álbum desconocido\n\t\t\tTitulo corto - 90 segundos\n", salidasDeConsola.toString());
-    }
-
-    @Test
-    public void verificaQueElOrdenamientoPorTituloSeaCorrecto() {
-        Cancion cancionCorta = new Cancion("Título corto", 90);
-        Cancion cancionIgual = new Cancion("Título igual", 30);
-        Cancion cancionMasLarga = new Cancion("Título más largo", 300);
-        Cancion cancionTodaviaMasLarga = new Cancion("Título todavía más largo", 200);
-
-        playlistDefault.agregarCancion(cancionIgual);
-        playlistDefault.agregarCancion(cancionCorta);
-        playlistDefault.agregarCancion(cancionIgual);
-        playlistDefault.agregarCancion(cancionTodaviaMasLarga);
-        playlistDefault.agregarCancion(cancionMasLarga);
-
-        playlistDefault.mostrarPlaylistOrdenadaPorTitulo();
-        assertEquals("La lista ordenada por título es:\n\t1. Título corto.\n\t2. Título igual.\n\t3. Título igual.\n\t4. Título más largo.\n\t5. Título todavía más largo.\n", salidasDeConsola.toString());
     }
 
 }
