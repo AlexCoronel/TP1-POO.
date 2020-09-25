@@ -38,7 +38,7 @@ public class Cancion {
     }
 
     private void setTitulo(String titulo) {
-        if (this.duracion > 0) this.titulo = titulo;
+        if (this.duracion != null) this.titulo = titulo;
     }
 
     private void setDuracion(int duracion) {
@@ -51,11 +51,11 @@ public class Cancion {
     }
 
     private void setAlbum(String album) {
-        if (this.duracion > 0) this.album = album;
+        if (this.duracion != null) this.album = album;
     }
 
     private void setArtista(String artista) {
-        if (this.duracion > 0) this.artista = artista;
+        if (this.duracion != null) this.artista = artista;
     }
 
     public String getPorTipo(String tipo) {
@@ -80,5 +80,9 @@ public class Cancion {
                 return "El tipo " + tipo + "no existe";
         }
     }
+    
+    public static void main(String[] args) {
+		Cancion cancion = new Cancion("Titulo de cancion", -145, "El artista", "El album");
+	}
 
 }

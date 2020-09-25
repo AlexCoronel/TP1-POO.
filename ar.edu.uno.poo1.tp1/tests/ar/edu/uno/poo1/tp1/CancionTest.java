@@ -2,18 +2,24 @@ package ar.edu.uno.poo1.tp1;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import org.junit.jupiter.api.Test;
 
 public class CancionTest {
+    private final ByteArrayOutputStream salidasDeConsola = new ByteArrayOutputStream();
 
     @Test
     public void intentaCrearCancionConTiempoNegativo() {
-        Cancion cancionFallida = new Cancion("Titulo de cancion", -145, "El artista", "El album");
+        System.setOut(new PrintStream(salidasDeConsola));
+        Cancion cancionErronea = new Cancion("Titulo de cancion", -145, "El artista", "El album");
 
-        assertEquals(null, cancionFallida.getTitulo());
-        assertEquals(0, cancionFallida.getDuracion());
-        assertEquals(null, cancionFallida.getArtista());
-        assertEquals(null, cancionFallida.getAlbum());
+        assertEquals(null, cancionErronea.getTitulo());
+        assertEquals(null, cancionErronea.getDuracion());
+        assertEquals(null, cancionErronea.getArtista());
+        assertEquals(null, cancionErronea.getAlbum());
+        assertEquals("La duración de la canción no puede ser negativa o cero\n", salidasDeConsola.toString());
     }
 
     @Test
