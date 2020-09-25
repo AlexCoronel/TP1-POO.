@@ -150,7 +150,22 @@ _Métodos_:
 
 ## Conclusiones
 
-TODO: Agregar conclusiones durante el proyecto, asegurarse de revisarlo antes de finalizar y entregarlo.
+### Positivas
+
+- Habernos juntado rápido, hacer un UML "estimativo" durante la planificación y dividir los métodos que iba a hacer cada uno nos ordenó mucho.
+- Pensar y desarrollar métodos "utilitarios" que puedan ser usados por otras clases y compañeros nos sirvió para ahorrar mucho tiempo.
+- Hacer tests unitarios para cada método a medida que los íbamos desarrollando colaboró a detectar problemas durante el desarrollo. Cuando se hacía una modificación en un método que era utilizado por otro generaba un error en el test de la segunda (no fue TDD, ¡pero casi!).
+- Tener en claro que los métodos públicos iban a ser los menos posibles nos ayudó a saber cuál iba a ser la visibilidad de cada uno (si no era totalmente necesario verlo desde "afuera", lo declarábamos privado).
+- Debatir con argumentos medibles es bueno para llegar a conclusiones bien fundamentadas.
+- La documentación en la página de Oracle para los distintos objetos es muy útil.
+- Stackoverflow es tu amigo pero tomá sus consejos con cuidado (hay cosas que se pueden hacer mejor).
+
+### Negativas
+
+- Haber decidido que íbamos a mantener el orden de carga en la lista hizo que algunas cosas se hicieran mas complicadas de lo esperado (¡pero también más divertidas!).
+- Algunos métodos que en un principio parecían muy sencillos no resultaron serlo.
+- Después de entregarlo, nos pareció que todavía quedan muchas cosas por mejorar y abstraer (varios métodos hacen cosas parecidas, seguramente se puede reutilizar código pero volver al diseño tan cerca del cierre nos va a traer problemas).
+- Todavía no pudimos hacer que el test de las distintas reproducciones diera positivo cuando se imprime la ayuda.
 
 ## Descargo sobre documento impreso u offline
 
