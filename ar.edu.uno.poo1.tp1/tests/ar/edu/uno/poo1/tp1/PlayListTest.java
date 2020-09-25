@@ -22,7 +22,7 @@ public class PlayListTest {
 
     // Tests de Constructores
     @Test
-    public void verificaQueSeCreaPlayListConTamaÃ±o() {
+    public void verificaQueSeCreaPlayListConTamaño() {
         PlayList playlist = new PlayList(10000);
 
         assertEquals(0, playlist.consultarCantidadDeCancionesCargadas());
@@ -33,11 +33,11 @@ public class PlayListTest {
         new PlayList();
         for (int i = 0; i < 1001; i++) playlistDefault.agregarCancion(cancionTest);
 
-        assertEquals("Generando la lista con 1.000 posiciones\nNo se puede agregar la canciÃ³n ya que la lista ha alcanzado su lÃ­mite mÃ¡ximo de 1000\n", salidasDeConsola.toString());
+        assertEquals("Generando la lista con 1.000 posiciones\nNo se puede agregar la canción ya que la lista ha alcanzado su límite máximo de 1000\n", salidasDeConsola.toString());
     }
 
     @Test
-    public void verificaQueSeCreaPlayListConTamaÃ±oYcancion() {
+    public void verificaQueSeCreaPlayListConTamañoYcancion() {
         PlayList playlist = new PlayList(10000, cancionTest);
 
         assertEquals(1, playlist.consultarCantidadDeCancionesCargadas());
@@ -56,10 +56,10 @@ public class PlayListTest {
 
         for (int i = 0; i < 11; i++) playlistErronea.agregarCancion(cancionTest);
 
-        assertEquals("Generar una lista de menos de dos posiciones carece de sentido. InicializÃ¡ndola arbitrariamente con 10 posiciones\nNo se puede agregar la canciÃ³n ya que la lista ha alcanzado su lÃ­mite mÃ¡ximo de 10\n", salidasDeConsola.toString());
+        assertEquals("Generar una lista de menos de dos posiciones carece de sentido. Inicializándola arbitrariamente con 10 posiciones\nNo se puede agregar la canción ya que la lista ha alcanzado su límite máximo de 10\n", salidasDeConsola.toString());
     }
 
-    // Tests de mÃ©todos
+    // Tests de métodos
     @Test
     public void verificaQueSePuedaCargarUnaCancion() {
         playlistDefault.agregarCancion(cancionTest);
@@ -109,10 +109,10 @@ public class PlayListTest {
 
     @Test
     public void verificaQueElOrdenamientoYmuestraPorTituloSeaCorrecto() {
-        Cancion cancionCorta = new Cancion("TÃ­tulo corto", 90);
-        Cancion cancionIgual = new Cancion("TÃ­tulo igual", 30);
-        Cancion cancionMasLarga = new Cancion("TÃ­tulo mÃ¡s largo", 300);
-        Cancion cancionTodaviaMasLarga = new Cancion("TÃ­tulo todavÃ­a mÃ¡s largo", 200);
+        Cancion cancionCorta = new Cancion("Título corto", 90);
+        Cancion cancionIgual = new Cancion("Título igual", 30);
+        Cancion cancionMasLarga = new Cancion("Título más largo", 300);
+        Cancion cancionTodaviaMasLarga = new Cancion("Título todavía más largo", 200);
 
         playlistDefault.agregarCancion(cancionIgual);
         playlistDefault.agregarCancion(cancionCorta);
@@ -121,7 +121,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionMasLarga);
 
         playlistDefault.mostrarPlaylistOrdenadaPorTitulo();
-        assertEquals("La lista ordenada por tÃ­tulo es:\n\t1. TÃ­tulo corto.\n\t2. TÃ­tulo igual.\n\t3. TÃ­tulo igual.\n\t4. TÃ­tulo mÃ¡s largo.\n\t5. TÃ­tulo todavÃ­a mÃ¡s largo.\n", salidasDeConsola.toString());
+        assertEquals("La lista ordenada por título es:\n\t1. Título corto.\n\t2. Título igual.\n\t3. Título igual.\n\t4. Título más largo.\n\t5. Título todavía más largo.\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -141,7 +141,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionTest);
 
         playlistDefault.mostrarPlaylistOrdenadaPorArtistaYtitulo();
-        assertEquals("La lista ordenada por artista y tÃ­tulo es:\n\tEl artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\tPrimer Artista:\n\t\tTitulo largo\n\tSegundo Artista:\n\t\tTitulo corto\n\tSin artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\t\tTitulo de cancion 2\n", salidasDeConsola.toString());
+        assertEquals("La lista ordenada por artista y título es:\n\tEl artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\tPrimer Artista:\n\t\tTitulo largo\n\tSegundo Artista:\n\t\tTitulo corto\n\tSin artista:\n\t\tTitulo de cancion\n\t\tTitulo de cancion\n\t\tTitulo de cancion 2\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -161,7 +161,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionTest);
 
         playlistDefault.reproducirPlaylist("ARTISTA");
-        assertEquals("Reproduciendo Titulo de cancion y su duraciÃ³n es de 320 segundos\nReproduciendo Titulo de cancion del Ã¡lbum Titulo Del Album y su duraciÃ³n es de 110 segundos\nReproduciendo Titulo de cancion 2 del Ã¡lbum Titulo Del Album y su duraciÃ³n es de 120 segundos\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\nReproduciendo Titulo largo de Primer Artista y su duraciÃ³n es de 300 segundos\nReproduciendo Titulo corto de Segundo Artista y su duraciÃ³n es de 90 segundos\n", salidasDeConsola.toString());
+        assertEquals("Reproduciendo Titulo de cancion y su duración es de 320 segundos\nReproduciendo Titulo de cancion del álbum Titulo Del Album y su duración es de 110 segundos\nReproduciendo Titulo de cancion 2 del álbum Titulo Del Album y su duración es de 120 segundos\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\nReproduciendo Titulo largo de Primer Artista y su duración es de 300 segundos\nReproduciendo Titulo corto de Segundo Artista y su duración es de 90 segundos\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionTest);
 
         playlistDefault.reproducirPlaylist("TITULO");
-        assertEquals("Reproduciendo Titulo corto de Segundo Artista y su duraciÃ³n es de 90 segundos\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\nReproduciendo Titulo de cancion y su duraciÃ³n es de 320 segundos\nReproduciendo Titulo de cancion del Ã¡lbum Titulo Del Album y su duraciÃ³n es de 110 segundos\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\nReproduciendo Titulo de cancion 2 del Ã¡lbum Titulo Del Album y su duraciÃ³n es de 120 segundos\nReproduciendo Titulo largo de Primer Artista y su duraciÃ³n es de 300 segundos\n", salidasDeConsola.toString());
+        assertEquals("Reproduciendo Titulo corto de Segundo Artista y su duración es de 90 segundos\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\nReproduciendo Titulo de cancion y su duración es de 320 segundos\nReproduciendo Titulo de cancion del álbum Titulo Del Album y su duración es de 110 segundos\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\nReproduciendo Titulo de cancion 2 del álbum Titulo Del Album y su duración es de 120 segundos\nReproduciendo Titulo largo de Primer Artista y su duración es de 300 segundos\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -191,7 +191,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionTest);
 
         playlistDefault.reproducirPlaylist("ALEATORIO");
-        assertEquals("Reproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\n", salidasDeConsola.toString());
+        assertEquals("Reproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -216,7 +216,7 @@ public class PlayListTest {
     public void verificaQueSeDevuelvaLaCancionMasLarga() {
         Cancion cancionLarga = new Cancion("Titulo largo", 300, "Primer Artista");
         Cancion cancionCorta = new Cancion("Titulo corto", 90, "Segundo Artista");
-        Cancion sinArtistaNiAlbum = new Cancion("Cancion mÃ¡s larga", 320);
+        Cancion sinArtistaNiAlbum = new Cancion("Cancion más larga", 320);
         Cancion sinArtistaConAlbum = new Cancion("Titulo de cancion", 110, null, "Titulo Del Album");
         Cancion sinArtistaConAlbum2 = new Cancion("Titulo de cancion 2", 120, null, "Titulo Del Album");
 
@@ -251,7 +251,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionTest);
 
         playlistDefault.reproducirPlaylist(null);
-        assertEquals("###############################\nEl reproductor admite cuatro modos de reproducciÃ³n:\n- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabÃ©tico\n- 'TITULO': Las canciones son reproducidas con sus TÃ­tulos en orden alfabÃ©tico\n- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio\n- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList\nNÃ³tese que el modo es case sensitive\n###############################\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\nReproduciendo Titulo largo de Primer Artista y su duraciÃ³n es de 300 segundos\nReproduciendo Titulo corto de Segundo Artista y su duraciÃ³n es de 90 segundos\nReproduciendo Titulo de cancion y su duraciÃ³n es de 320 segundos\nReproduciendo Titulo de cancion del Ã¡lbum Titulo Del Album y su duraciÃ³n es de 110 segundos\nReproduciendo Titulo de cancion 2 del Ã¡lbum Titulo Del Album y su duraciÃ³n es de 120 segundos\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\n", salidasDeConsola.toString());
+        assertEquals("###############################\nEl reproductor admite cuatro modos de reproducción:\n- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabético\n- 'TITULO': Las canciones son reproducidas con sus Títulos en orden alfabético\n- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio\n- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList\nNótese que el modo es case sensitive\n###############################\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\nReproduciendo Titulo largo de Primer Artista y su duración es de 300 segundos\nReproduciendo Titulo corto de Segundo Artista y su duración es de 90 segundos\nReproduciendo Titulo de cancion y su duración es de 320 segundos\nReproduciendo Titulo de cancion del álbum Titulo Del Album y su duración es de 110 segundos\nReproduciendo Titulo de cancion 2 del álbum Titulo Del Album y su duración es de 120 segundos\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -259,10 +259,10 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionTest);
 
         playlistDefault.reproducirPlaylist(null);
-        assertEquals("###############################\nEl reproductor admite cuatro modos de reproducciÃ³n:\n- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabÃ©tico\n- 'TITULO': Las canciones son reproducidas con sus TÃ­tulos en orden alfabÃ©tico\n- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio\n- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList\nNÃ³tese que el modo es case sensitive\n###############################\nReproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\n", salidasDeConsola.toString());
+        assertEquals("###############################\nEl reproductor admite cuatro modos de reproducción:\n- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabético\n- 'TITULO': Las canciones son reproducidas con sus Títulos en orden alfabético\n- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio\n- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList\nNótese que el modo es case sensitive\n###############################\nReproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\n", salidasDeConsola.toString());
 
         playlistDefault.reproducirPlaylist(null);
-        assertEquals("Reproduciendo Titulo de cancion de El artista del Ã¡lbum El album y su duraciÃ³n es de 145 segundos\n", salidasDeConsola.toString());
+        assertEquals("Reproduciendo Titulo de cancion de El artista del álbum El album y su duración es de 145 segundos\n", salidasDeConsola.toString());
     }
     */
 
@@ -272,17 +272,17 @@ public class PlayListTest {
 */
 
 
-    // Verificaciones de errores y mÃ©todos auxiliares o "extra" 
+    // Verificaciones de errores y métodos auxiliares o "extra" 
     @Test
     public void verificaQueDevuelvaNullYmuestreErrorCuandoAccedemosAunaPosicionVacia() {
         assertEquals(null, playlistDefault.consultarTituloDeCancion(10));
-        assertEquals("No hay ninguna canciÃ³n cargada en la posiciÃ³n 10\n", salidasDeConsola.toString());
+        assertEquals("No hay ninguna canción cargada en la posición 10\n", salidasDeConsola.toString());
     }
 
     @Test
     public void verificaQueDevuelvaNullYmuestreErrorCuandoAccedemosAunaPosicionMayorQueLaPlaylist() {
         assertEquals(null, playlistDefault.consultarTituloDeCancion(10001));
-        assertEquals("La posiciÃ³n solicitada excede el tamaÃ±o de la playlist (1000)\n", salidasDeConsola.toString());
+        assertEquals("La posición solicitada excede el tamaño de la playlist (1000)\n", salidasDeConsola.toString());
     }
 
     @Test
@@ -302,7 +302,7 @@ public class PlayListTest {
         playlistDefault.agregarCancion(cancionTest);
 
         playlistDefault.mostrarPlaylistOrdenadaPorArtistaAlbumYtitulo();
-        assertEquals("La lista ordenada por artista, Ã¡lbum y tÃ­tulo es:\n\tSin artista:\n\t\tâ†³ Ãlbum desconocido\n\t\t\tTitulo de cancion - 320 segundos\n\t\tâ†³ Titulo Del Album\n\t\t\tTitulo de cancion - 110 segundos\n\t\t\tTitulo de cancion 2 - 120 segundos\n\tEl artista:\n\t\tâ†³ El album\n\t\t\tTitulo de cancion - 145 segundos\n\t\t\tTitulo de cancion - 145 segundos\n\tPrimer Artista:\n\t\tâ†³ Ãlbum desconocido\n\t\t\tTitulo largo - 300 segundos\n\tSegundo Artista:\n\t\tâ†³ Ãlbum desconocido\n\t\t\tTitulo corto - 90 segundos\n", salidasDeConsola.toString());
+        assertEquals("La lista ordenada por artista, álbum y título es:\n\tSin artista:\n\t\t Álbum desconocido\n\t\t\tTitulo de cancion - 320 segundos\n\t\t Titulo Del Album\n\t\t\tTitulo de cancion - 110 segundos\n\t\t\tTitulo de cancion 2 - 120 segundos\n\tEl artista:\n\t\t El album\n\t\t\tTitulo de cancion - 145 segundos\n\t\t\tTitulo de cancion - 145 segundos\n\tPrimer Artista:\n\t\t Álbum desconocido\n\t\t\tTitulo largo - 300 segundos\n\tSegundo Artista:\n\t\t Álbum desconocido\n\t\t\tTitulo corto - 90 segundos\n", salidasDeConsola.toString());
     }
 
 }

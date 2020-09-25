@@ -14,11 +14,11 @@ public class PlayList {
 
     PlayList(int cantidadDeCanciones) {
         if (cantidadDeCanciones <= 1) {
-            // AÃºn no se viÃ³ Excepciones. Mostramos un mensaje y generamos la PlayList mÃ­nima
-            System.out.println("Generar una lista de menos de dos posiciones carece de sentido. InicializÃ¡ndola arbitrariamente con 10 posiciones");
+            // Aún no se vió Excepciones. Mostramos un mensaje y generamos la PlayList mínima
+            System.out.println("Generar una lista de menos de dos posiciones carece de sentido. Inicializándola arbitrariamente con 10 posiciones");
             cantidadDeCanciones = 10;
         } else if (cantidadDeCanciones > 10000) {
-            System.out.println("La cantidad mÃ¡xima de canciones es 10.000. Generando la lista con esa cantidad");
+            System.out.println("La cantidad máxima de canciones es 10.000. Generando la lista con esa cantidad");
             cantidadDeCanciones = 10000;
         }
         this.lista = new Cancion[cantidadDeCanciones];
@@ -33,7 +33,7 @@ public class PlayList {
     }
 
     PlayList() {
-        // Generamos la lista con un tamaÃ±o "razonable" por default
+        // Generamos la lista con un tamaño "razonable" por default
         this(1000);
         System.out.println("Generando la lista con 1.000 posiciones");
     }
@@ -92,7 +92,7 @@ public class PlayList {
     public boolean agregarCancion(Cancion cancion) {
         if (cancion == null) return false;
         if (this.lista.length == this.getUltimaCancionCargada()) {
-            System.out.println("No se puede agregar la canciÃ³n ya que la lista ha alcanzado su lÃ­mite mÃ¡ximo de " + this.lista.length);
+            System.out.println("No se puede agregar la canción ya que la lista ha alcanzado su límite máximo de " + this.lista.length);
             return false;
         } else {
             if (cancion.getPorTipo("ARTISTA") == null || 
@@ -146,7 +146,7 @@ public class PlayList {
                 }
             }
         }
-        System.out.println("La canciÃ³n buscada no se encontraba en la playlist");
+        System.out.println("La canción buscada no se encontraba en la playlist");
         return false;
     }
 
@@ -156,7 +156,7 @@ public class PlayList {
                 this.lista[i] = this.lista[i+1];
             }
             this.cancionEliminada();
-            System.out.println("Â¡La canciÃ³n fue removida!");
+            System.out.println("¡La canción fue removida!");
             return true;
         } else {
             this.mostrarErrorDeIndice(posicion);
@@ -166,7 +166,7 @@ public class PlayList {
 
     public int consultarCancionMasCorta() {
         if (getUltimaCancionCargada() == 0) {
-            System.out.println("AÃºn no se cargaron canciones a la playlist");
+            System.out.println("Aún no se cargaron canciones a la playlist");
             return -1;
         }
 
@@ -184,7 +184,7 @@ public class PlayList {
 
     public int consultarCancionMasLarga() {
         if (getUltimaCancionCargada() == 0) {
-            System.out.println("AÃºn no se cargaron canciones a la playlist");
+            System.out.println("Aún no se cargaron canciones a la playlist");
             return -1;
         }
 
@@ -202,7 +202,7 @@ public class PlayList {
 
     public boolean reproducirPlaylist(String modo) {
         if (getUltimaCancionCargada() == 0) {
-            System.out.println("AÃºn no se cargaron canciones a la playlist. No se puede reproducir");
+            System.out.println("Aún no se cargaron canciones a la playlist. No se puede reproducir");
             return false;
         } else {
             if (modo == null) modo = "";
@@ -226,12 +226,12 @@ public class PlayList {
                 default:
                     if (!seMostroAyudaDeReproductor) {
                         System.out.println("###############################");
-                        System.out.println("El reproductor admite cuatro modos de reproducciÃ³n:");
-                        System.out.println("- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabÃ©tico");
-                        System.out.println("- 'TITULO': Las canciones son reproducidas con sus TÃ­tulos en orden alfabÃ©tico");
+                        System.out.println("El reproductor admite cuatro modos de reproducción:");
+                        System.out.println("- 'ARTISTA': Las canciones son reproducidas con sus Artistas en orden alfabético");
+                        System.out.println("- 'TITULO': Las canciones son reproducidas con sus Títulos en orden alfabético");
                         System.out.println("- 'ALEATORIO': Las canciones son reproducidas en orden aleatorio");
                         System.out.println("- (predeterminado): Las canciones son reproducidas en el mismo orden que fueron cargadas a la PlayList");
-                        System.out.println("\nNÃ³tese que el modo es case sensitive");
+                        System.out.println("\nNótese que el modo es case sensitive");
                         System.out.println("###############################");
                         this.seMostroAyudaDeReproductor = !this.seMostroAyudaDeReproductor;
                     }
@@ -259,7 +259,7 @@ public class PlayList {
             this.generadorDeAleatoriosRecursivo(generador, array, indice +1);
         }
 
-        // Nunca vamos a llegar a este punto pero lo agregamos para evitar errores de compilaciÃ³n
+        // Nunca vamos a llegar a este punto pero lo agregamos para evitar errores de compilación
         return array;
     }
 
@@ -268,22 +268,22 @@ public class PlayList {
             for (int posicion = 0; posicion < this.ultimaCancionCargada; posicion++) {
                 System.out.println("Reproduciendo " + this.lista[posicion].getPorTipo("TITULO") +
                 (((this.lista[posicion].getPorTipo("ARTISTA").compareTo("") == 0) ? "" : " de " + this.lista[posicion].getPorTipo("ARTISTA")) +
-                (((this.lista[posicion].getPorTipo("ALBUM").compareTo("") == 0) ? "" : " del Ã¡lbum " + this.lista[posicion].getPorTipo("ALBUM")) +
-                " y su duraciÃ³n es de " + this.lista[posicion].getPorTipo("DURACION") + " segundos")));
+                (((this.lista[posicion].getPorTipo("ALBUM").compareTo("") == 0) ? "" : " del álbum " + this.lista[posicion].getPorTipo("ALBUM")) +
+                " y su duración es de " + this.lista[posicion].getPorTipo("DURACION") + " segundos")));
             }
         } else {
             for (int posicion = 0; posicion < this.ultimaCancionCargada; posicion++) {
                 System.out.println("Reproduciendo " + this.lista[array[posicion]].getPorTipo("TITULO") +
                 (((this.lista[array[posicion]].getPorTipo("ARTISTA").compareTo("") == 0) ? "" : " de " + this.lista[array[posicion]].getPorTipo("ARTISTA")) +
-                (((this.lista[array[posicion]].getPorTipo("ALBUM").compareTo("") == 0) ? "" : " del Ã¡lbum " + this.lista[array[posicion]].getPorTipo("ALBUM")) +
-                " y su duraciÃ³n es de " + this.lista[array[posicion]].getPorTipo("DURACION") + " segundos")));
+                (((this.lista[array[posicion]].getPorTipo("ALBUM").compareTo("") == 0) ? "" : " del álbum " + this.lista[array[posicion]].getPorTipo("ALBUM")) +
+                " y su duración es de " + this.lista[array[posicion]].getPorTipo("DURACION") + " segundos")));
             }
         }
     }
 
     private void mostrarErrorDeIndice(int posicion) {
-        if (posicion > this.lista.length) System.out.println("La posiciÃ³n solicitada excede el tamaÃ±o de la playlist (" + this.lista.length + ")");
-        else System.out.println("No hay ninguna canciÃ³n cargada en la posiciÃ³n " + posicion);
+        if (posicion > this.lista.length) System.out.println("La posición solicitada excede el tamaño de la playlist (" + this.lista.length + ")");
+        else System.out.println("No hay ninguna canción cargada en la posición " + posicion);
     }
 
     private boolean laCancionEstaCargada(int posicion) {
@@ -324,7 +324,7 @@ public class PlayList {
         int[] artistasUnicos = this.artistasUnicos();
         String artistaPrevio = "";
 
-        System.out.println("La lista ordenada por artista y tÃ­tulo es:");
+        System.out.println("La lista ordenada por artista y título es:");
         for (int i = 0; i < this.getUltimaCancionCargada() && artistasUnicos[i] != Integer.MAX_VALUE; i++) {
 
             String artista = this.lista[artistasUnicos[i]].getArtista();
@@ -354,7 +354,7 @@ public class PlayList {
             this.ordenarConSeleccion(this.ordenadasPorTitulo, "TITULO");
         }
 
-        System.out.println("La lista ordenada por artista, Ã¡lbum y tÃ­tulo es:");
+        System.out.println("La lista ordenada por artista, álbum y título es:");
         String artistaPrevio = "";
         String albumPrevio = "";
         for (int i = 0; i < this.ordenadasPorArtista.length && this.ordenadasPorArtista[i] != Integer.MAX_VALUE; i++) {
@@ -374,9 +374,9 @@ public class PlayList {
 
             String album = this.lista[this.ordenadasPorArtista[i]].getAlbum();
             if (album == null) {
-                album = "\tâ†³ Ãlbum desconocido";
+                album = "\t Álbum desconocido";
             } else {
-                album = "\tâ†³ " + album;
+                album = "\t " + album;
             }
 
             if (!esElMismoArtista || album.compareTo(albumPrevio) != 0) {
@@ -393,22 +393,22 @@ public class PlayList {
             this.ordenarConSeleccion(this.ordenadasPorTitulo, "TITULO");
         }
 
-        System.out.println("La lista ordenada por tÃ­tulo es:");
+        System.out.println("La lista ordenada por título es:");
         for (int i = 0; i < this.ordenadasPorTitulo.length && this.ordenadasPorTitulo[i] != Integer.MAX_VALUE; i++) {
             System.out.println("\t" + (i +1) + ". " + this.lista[this.ordenadasPorTitulo[i]].getTitulo() + ".");
         }
     }
 
-    // Se utilizan Ãºnicamente algortimos de ordenamiento vistos en Algoritmos y ProgramaciÃ³n 1
+    // Se utilizan únicamente algortimos de ordenamiento vistos en Algoritmos y Programación 1
     private int[] ordenarConBurbujeo(int[] arrayDePosiciones, String tipo) {
         if (this.getUltimaCancionCargada() == 0) {
-            System.err.println("AÃºn no se cargaron canciones en la playlist. No se puede ordenar");
+            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
 
-            // El primer for debe recorrer el array una vez, el segundo lo harÃ¡ para cada posiciÃ³n de i
+            // El primer for debe recorrer el array una vez, el segundo lo hará para cada posición de i
             for (int i = 0; i < this.getUltimaCancionCargada(); i++) {
                 for (int j = 0; j < this.getUltimaCancionCargada() -i -1; j++) {
-                    // Si el tamaÃ±o del primero es mayor a la del segundo (adyacente), se intercambian valores
+                    // Si el tamaño del primero es mayor a la del segundo (adyacente), se intercambian valores
                     if (this.lista[arrayDePosiciones[j]].getPorTipo(tipo).compareToIgnoreCase(this.lista[arrayDePosiciones[j +1]].getPorTipo(tipo)) > 0) {
                         int temporaria = arrayDePosiciones[j];
                         arrayDePosiciones[j] = arrayDePosiciones[j +1];
@@ -423,7 +423,7 @@ public class PlayList {
 
     private int[] ordenarConSeleccion(int[] arrayDePosiciones, String tipo) {
         if (this.getUltimaCancionCargada() == 0) {
-            System.err.println("AÃºn no se cargaron canciones en la playlist. No se puede ordenar");
+            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
 
             for (int i = 0; i < this.getUltimaCancionCargada(); i++) {
@@ -455,7 +455,7 @@ public class PlayList {
 
     private int[] ordenarConInsercion(int[] arrayDePosiciones, String tipo) {
         if (this.ultimaCancionCargada == 0) {
-            System.err.println("AÃºn no se cargaron canciones en la playlist. No se puede ordenar");
+            System.err.println("Aún no se cargaron canciones en la playlist. No se puede ordenar");
         } else if (!this.getEstaOrdenadaPorTipo(tipo)) {
             for (int i = 1; i < this.getUltimaCancionCargada(); i++) {
                 // Guardo el valor que actualmente esta en el puntero i dentro de varloActual y luego seteo a j en la posicion anterior a i (para no volver a recorrer posiciones ya verificadas)
@@ -469,7 +469,7 @@ public class PlayList {
                     j = j -1;
                 }
 
-                // Copiamos la posicionActual a su posiciÃ³n final y vamos a la proxima iteraciÃ³n
+                // Copiamos la posicionActual a su posición final y vamos a la proxima iteración
                 arrayDePosiciones[j +1] = posicionActual;
             }
 

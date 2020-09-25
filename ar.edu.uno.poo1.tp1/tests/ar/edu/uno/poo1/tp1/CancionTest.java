@@ -19,7 +19,7 @@ public class CancionTest {
         assertEquals(null, cancionErronea.getDuracion());
         assertEquals(null, cancionErronea.getArtista());
         assertEquals(null, cancionErronea.getAlbum());
-        assertEquals("La duraciÃ³n de la canciÃ³n no puede ser negativa o cero\n", salidasDeConsola.toString());
+        assertEquals("La duración de la canción no puede ser negativa o cero\n", salidasDeConsola.toString());
     }
 
     @Test
