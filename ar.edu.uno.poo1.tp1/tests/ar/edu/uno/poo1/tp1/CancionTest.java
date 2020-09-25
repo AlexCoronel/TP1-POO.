@@ -1,6 +1,6 @@
-package playlist;
+package ar.edu.uno.poo1.tp1;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -45,5 +45,32 @@ public class CancionTest {
         assertEquals("El artista", cancionTest.getArtista());
         assertEquals("El album", cancionTest.getAlbum());
     }
+    
+    @Test
+    public void verificaQueGetPorTipoFuncionaConTitulo() {
+    	Cancion cancionTest = new Cancion("Titulo de cancion", 145, "El artista", "El album");
 
+    	assertEquals("Titulo de cancion", cancionTest.getPorTipo("TITULO"));
+    }
+
+    @Test
+    public void verificaQueGetPorTipoFuncionaConDuracion() {
+    	Cancion cancionTest = new Cancion("Titulo de cancion", 145, "El artista", "El album");
+
+    	assertEquals("145", cancionTest.getPorTipo("DURACION"));
+    }
+
+    @Test
+    public void verificaQueGetPorTipoFuncionaConArtista() {
+    	Cancion cancionTest = new Cancion("Titulo de cancion", 145, "El artista", "El album");
+
+    	assertEquals("El artista", cancionTest.getPorTipo("ARTISTA"));
+    }
+
+    @Test
+    public void verificaQueGetPorTipoFuncionaConAlbum() {
+    	Cancion cancionTest = new Cancion("Titulo de cancion", 145, "El artista", "El album");
+
+    	assertEquals("El album", cancionTest.getPorTipo("ALBUM"));
+    }
 }

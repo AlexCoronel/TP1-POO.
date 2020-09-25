@@ -1,4 +1,4 @@
-package playlist;
+package ar.edu.uno.poo1.tp1;
 
 import java.util.Arrays;
 import java.util.Random;
