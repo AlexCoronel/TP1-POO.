@@ -1,4 +1,4 @@
-package playlist;
+package ar.edu.uno.poo1.tp1;
 
 public class Cancion {
     private String titulo;

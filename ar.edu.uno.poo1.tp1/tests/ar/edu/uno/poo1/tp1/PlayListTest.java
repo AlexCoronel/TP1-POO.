@@ -1,6 +1,6 @@
-package playlist;
+package ar.edu.uno.poo1.tp1;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -231,7 +231,7 @@ public class PlayListTest {
     }
 
     /*
-        Esperando respuesta al siguiente post:
+        Esperando respuesta al siguiente hilo:
         http://campusvirtual.uno.edu.ar/moodle/mod/forum/discuss.php?d=21709
 
     @Test
@@ -272,11 +272,7 @@ public class PlayListTest {
 */
 
 
-
-
-
-
-
+    // Verificaciones de errores y métodos auxiliares o "extra" 
     @Test
     public void verificaQueDevuelvaNullYmuestreErrorCuandoAccedemosAunaPosicionVacia() {
         assertEquals(null, playlistDefault.consultarTituloDeCancion(10));
